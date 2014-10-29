@@ -1,0 +1,26 @@
+{
+  "name": "promise-mysql",
+  "version": "0.0.1",
+  "description": "A bluebird wrapper for node-mysql",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lukeb-uk/node-promise-mysql.git"
+  },
+  "keywords": [
+    "mysql",
+    "promises"
+  ],
+  "author": "Luke Bonaccorsi",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/lukeb-uk/node-promise-mysql/issues"
+  },
+  "dependencies": {
+    "bluebird": "~2.3.10",
+    "mysql": "~2.5.2"
+  }
+}
