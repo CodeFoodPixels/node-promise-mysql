@@ -1,6 +1,6 @@
 {
   "name": "promise-mysql",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A bluebird wrapper for node-mysql",
   "main": "index.js",
   "scripts": {
@@ -11,8 +11,24 @@
     "url": "https://github.com/Eventasaur/node-promise-mysql.git"
   },
   "keywords": [
+    "promise",
+    "performance",
+    "promises",
+    "promises-a",
+    "promises-aplus",
+    "async",
+    "await",
+    "deferred",
+    "deferreds",
+    "future",
+    "flow control",
+    "dsl",
+    "fluent interface"
+    "database",
     "mysql",
-    "promises"
+    "mysql-promise",
+    "bluebird",
+    "q"
   ],
   "author": "Luke Bonaccorsi",
   "license": "MIT",
