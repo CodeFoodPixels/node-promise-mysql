@@ -17,11 +17,15 @@ At the minute only the standard connection is supported (using `.createConnectio
 To connect, you simply call `.createConnection()` like you would on node-mysql:
 ```javascript
 var mysql = require('promise-mysql');
-var connection = mysql.createConnection({
+var connection;
+
+mysql.createConnection({
     host: 'localhost',
     user: 'sauron',
     password: 'theonetruering',
     database: 'mordor'
+}).then(function(conn){
+    connection = conn;
 });
 ```
 
