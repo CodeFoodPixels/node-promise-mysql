@@ -36,7 +36,7 @@
     "url": "https://github.com/Eventasaur/node-promise-mysql/issues"
   },
   "dependencies": {
-    "bluebird": "~2.3.10",
-    "mysql": "~2.5.2"
+    "mysql": "~2.5.2",
+    "native-or-bluebird": "^1.2.0"
   }
 }
