@@ -4,7 +4,7 @@
   "description": "A bluebird wrapper for node-mysql",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "./node_modules/mocha/bin/_mocha -R spec"
   },
   "repository": {
     "type": "git",
@@ -33,10 +33,14 @@
   "author": "Luke Bonaccorsi",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Eventasaur/node-promise-mysql/issues"
+    "url": "https://github.com/lukeb-uk/node-promise-mysql/issues"
   },
   "dependencies": {
     "bluebird": "^2.10.2",
     "mysql": "^2.9.0"
+  },
+  "devDependencies": {
+    "chai": "^3.4.1",
+    "mocha": "^2.3.4"
   }
 }
