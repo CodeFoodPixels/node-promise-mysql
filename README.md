@@ -10,9 +10,11 @@ $ npm install promise-mysql
 
 Please refer to [node-mysql](https://github.com/felixge/node-mysql) for documentation on how to use the mysql functions and refer to [Bluebird](https://github.com/petkaantonov/bluebird/) for documentation on Bluebird's promises
 
-At the minute only the standard connection is supported (using `.createConnection()`).
+At the minute only the standard connection (using `.createConnection()`) and the pool (using `.createPool()`) is supported. `createPoolCluster` is not implemented yet.
 
 ## Examples
+
+### Connection
 
 To connect, you simply call `.createConnection()` like you would on node-mysql:
 ```javascript
@@ -54,6 +56,47 @@ connection.query('select * from tablethatdoesnotexist').then(function(){
     console.log(error);
 });
 
+```
+
+### Pool
+
+Use pool directly:
+
+```javascript
+pool = mysql.createPool({
+  host: 'localhost',
+  user: 'sauron',
+  password: 'theonetruering',
+  database: 'mordor'
+  connectionLimit: 10
+});
+
+pool.query('select `name` from hobbits').then(function(rows){
+    // Logs out a list of hobbits
+    console.log(rows);
+});
+
+```
+
+Get a connection from the pool:
+
+```javascript
+pool.getConnection().then(function(connection) {
+    connection.query('select `name` from hobbits').then(...)
+}).catch(function(err) {
+    done(err);
+});
+```
+
+## Tests
+
+At the moment only simple basics tests are implemented using Mocha.
+To run the tests, you need to connect to a running MySQL server. A database or write permissions are not required.
+
+Start the test suite with
+
+```bash
+DB_HOST=localhost DB_USER=user DB_PWD=pwd npm test
 ```
 
 ## License
