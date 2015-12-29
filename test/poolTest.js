@@ -28,8 +28,40 @@ describe('The connection pool', function() {
         });
     });
 
-    it('acquireConnection');
+    it('shoudl release a connection without errors', function(done) {
+        var pool = mysql.createPool({
+            host: process.env.DB_HOST,
+            user: process.env.DB_USER,
+            password: process.env.DB_PWD,
+            connectionLimit: 1,
+        });
 
-    it('releaseConnection');
+        //We need to track the order of execution here,
+        //We should get the 2nd connection after the first one
+        //was released successfully.
+        var seq = 0;
+
+        pool.getConnection().then(function(con) {
+            expect(++seq).to.be.equal(1);
+
+            pool.getConnection().then(function(con) {
+                expect(++seq).to.be.equal(3);
+                pool.releaseConnection(con);
+                pool.end();
+                done();
+            }).catch(function(err) {
+                pool.end();
+                done(err);
+            });
+
+            process.nextTick(function(arguments) {
+                expect(++seq).to.be.equal(2);
+                pool.releaseConnection(con);
+            });
+
+        }).catch(function(err) {
+            done(err);
+        });
+    });
 
 });
