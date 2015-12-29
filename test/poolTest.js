@@ -28,7 +28,7 @@ describe('The connection pool', function() {
         });
     });
 
-    it('shoudl release a connection without errors', function(done) {
+    it('should release a connection without errors', function(done) {
         var pool = mysql.createPool({
             host: process.env.DB_HOST,
             user: process.env.DB_USER,
