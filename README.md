@@ -1,5 +1,7 @@
 Promise-mysql
 ==================
+[![Build Status](https://travis-ci.org/lukeb-uk/node-promise-mysql.svg?style=flat&branch=master)](https://travis-ci.org/lukeb-uk/node-promise-mysql?branch=master)
+
 Promise-mysql is a wrapper for [node-mysql](https://github.com/felixge/node-mysql) that wraps function calls with [Bluebird](https://github.com/petkaantonov/bluebird/) promises. Usually this would be done with Bluebird's `.promisifyAll()` method, but node-mysql's footprint is different to that of what Bluebird expects.
 
 To install promise-mysql, use [npm](http://github.com/isaacs/npm):
