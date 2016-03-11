@@ -73,7 +73,7 @@ pool = mysql.createPool({
   host: 'localhost',
   user: 'sauron',
   password: 'theonetruering',
-  database: 'mordor'
+  database: 'mordor',
   connectionLimit: 10
 });
 
