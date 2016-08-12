@@ -120,7 +120,6 @@ module.exports = getSqlConnection;
 
 sqlQuery.js:
 ```javascript
-#sqlQuery.js
 var Promise = require("bluebird");
 var getSqlConnection = require('./databaseConnection');
 Promise.using(getSqlConnection(), function(connection) {
