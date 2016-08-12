@@ -94,9 +94,10 @@ pool.getConnection().then(function(connection) {
 });
 ```
 
-#### Implementing a Using/Disposer pattern using Bluebird's built-in `using` and `disposer` function.
+##### Using/Disposer Pattern with Pool
+Example implementing a using/disposer pattern using Bluebird's built-in `using` and `disposer` functions.
 
-dbConnection.js:
+databaseConnection.js:
 ```javascript
 var mysql = require('promise-mysql');
 
@@ -121,12 +122,12 @@ sqlQuery.js:
 ```javascript
 #sqlQuery.js
 var Promise = require("bluebird");
-var getSqlConnection = require('./databaseConnection')
+var getSqlConnection = require('./databaseConnection');
 Promise.using(getSqlConnection(), function(connection) {
     return connection.query('select `name` from hobbits').then(function(row) {
       return process(rows);
     }).catch(function(error) {
-      done(error);
+      console.log(error);
     });
 })
 ```
