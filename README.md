@@ -94,6 +94,44 @@ pool.getConnection().then(function(connection) {
 });
 ```
 
+#### Implementing a Using/Disposer pattern using Bluebird's built-in `using` and `disposer` function.
+
+dbConnection.js:
+```javascript
+var mysql = require('promise-mysql');
+
+pool = mysql.createPool({
+  host: 'localhost',
+  user: 'sauron',
+  password: 'theonetruering',
+  database: 'mordor',
+  connectionLimit: 10
+});
+
+function getSqlConnection() {
+  return pool.getConnection().disposer(function(connection) {
+    pool.releaseConnection(connection);
+  });
+}
+
+module.exports = getSqlConnection;
+```
+
+sqlQuery.js:
+```javascript
+#sqlQuery.js
+var Promise = require("bluebird");
+var getSqlConnection = require('./databaseConnection')
+Promise.using(getSqlConnection(), function(connection) {
+    return connection.query('select `name` from hobbits').then(function(row) {
+      return process(rows);
+    }).catch(function(error) {
+      done(error);
+    });
+})
+```
+
+
 ## Tests
 
 At the moment only simple basics tests are implemented using Mocha.
