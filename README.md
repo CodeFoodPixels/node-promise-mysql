@@ -94,7 +94,7 @@ pool.getConnection().then(function(connection) {
 });
 ```
 
-##### Using/Disposer Pattern with Pool
+#### Using/Disposer Pattern with Pool
 Example implementing a using/disposer pattern using Bluebird's built-in `using` and `disposer` functions.
 
 databaseConnection.js:
