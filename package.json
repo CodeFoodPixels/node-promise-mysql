@@ -36,7 +36,7 @@
     "url": "https://github.com/lukeb-uk/node-promise-mysql/issues"
   },
   "dependencies": {
-    "bluebird": "^2.10.2",
+    "bluebird": "^3.4.6",
     "mysql": "^2.9.0"
   },
   "devDependencies": {
