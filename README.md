@@ -2,7 +2,7 @@ Promise-mysql
 ==================
 [![Build Status](https://travis-ci.org/lukeb-uk/node-promise-mysql.svg?style=flat&branch=master)](https://travis-ci.org/lukeb-uk/node-promise-mysql?branch=master)
 
-Promise-mysql is a wrapper for [node-mysql](https://github.com/felixge/node-mysql) that wraps function calls with [Bluebird](https://github.com/petkaantonov/bluebird/) promises. Usually this would be done with Bluebird's `.promisifyAll()` method, but node-mysql's footprint is different to that of what Bluebird expects.
+Promise-mysql is a wrapper for [mysqljs/mysql](https://github.com/mysqljs/mysql) that wraps function calls with [Bluebird](https://github.com/petkaantonov/bluebird/) promises. Usually this would be done with Bluebird's `.promisifyAll()` method, but mysqljs/mysql's footprint is different to that of what Bluebird expects.
 
 To install promise-mysql, use [npm](http://github.com/isaacs/npm):
 
@@ -10,7 +10,7 @@ To install promise-mysql, use [npm](http://github.com/isaacs/npm):
 $ npm install promise-mysql
 ```
 
-Please refer to [node-mysql](https://github.com/felixge/node-mysql) for documentation on how to use the mysql functions and refer to [Bluebird](https://github.com/petkaantonov/bluebird/) for documentation on Bluebird's promises
+Please refer to [mysqljs/mysql](https://github.com/mysqljs/mysql) for documentation on how to use the mysql functions and refer to [Bluebird](https://github.com/petkaantonov/bluebird/) for documentation on Bluebird's promises
 
 At the minute only the standard connection (using `.createConnection()`) and the pool (using `.createPool()`) is supported. `createPoolCluster` is not implemented yet.
 
@@ -18,7 +18,7 @@ At the minute only the standard connection (using `.createConnection()`) and the
 
 ### Connection
 
-To connect, you simply call `.createConnection()` like you would on node-mysql:
+To connect, you simply call `.createConnection()` like you would on mysqljs/mysql:
 ```javascript
 var mysql = require('promise-mysql');
 var connection;
@@ -33,9 +33,21 @@ mysql.createConnection({
 });
 ```
 
-To use the promise, you call the methods as you would if you were just using node-mysql, minus the callback. You then add a .then() with your function in:
+To use the promise, you call the methods as you would if you were just using mysqljs/mysql, minus the callback. You then add a .then() with your function in:
 ```javascript
-connection.query('select `name` from hobbits').then(function(rows){
+var mysql = require('promise-mysql');
+var connection;
+
+mysql.createConnection({
+    host: 'localhost',
+    user: 'sauron',
+    password: 'theonetruering',
+    database: 'mordor'
+}).then(function(conn){
+    connection = conn;
+
+    return connection.query('select `name` from hobbits');
+}).then(function(rows){
     // Logs out a list of hobbits
     console.log(rows);
 });
@@ -43,7 +55,19 @@ connection.query('select `name` from hobbits').then(function(rows){
 
 You can even chain the promises, using a return within the .then():
 ```javascript
-connection.query('select `id` from hobbits where `name`="frodo"').then(function(rows){
+var mysql = require('promise-mysql');
+var connection;
+
+mysql.createConnection({
+    host: 'localhost',
+    user: 'sauron',
+    password: 'theonetruering',
+    database: 'mordor'
+}).then(function(conn){
+    connection = conn;
+
+    return connection.query('select `id` from hobbits where `name`="frodo"');
+}).then(function(rows){
     // Query the items for a ring that Frodo owns.
     return connection.query('select * from items where `owner`="' + rows[0].id + '" and `name`="ring"');
 }).then(function(rows){
@@ -54,8 +78,19 @@ connection.query('select `id` from hobbits where `name`="frodo"').then(function(
 
 You can catch errors using the .catch() method. You can still add .then() clauses, they'll just get skipped if there's an error
 ```javascript
-connection.query('select * from tablethatdoesnotexist').then(function(){
+var mysql = require('promise-mysql');
+var connection;
 
+mysql.createConnection({
+    host: 'localhost',
+    user: 'sauron',
+    password: 'theonetruering',
+    database: 'mordor'
+}).then(function(conn){
+    connection = conn;
+
+    return connection.query('select * from tablethatdoesnotexist');
+}).then(function(){
     return connection.query('select * from hobbits');
 }).catch(function(error){
     //logs out the error
