@@ -29,3 +29,4 @@ node_modules
 
 .tern-project
 .jscsrc
+.DS_Store
