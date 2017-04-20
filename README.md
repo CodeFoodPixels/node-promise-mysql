@@ -133,6 +133,29 @@ pool.getConnection().then(function(connection) {
 });
 ```
 
+### Inject `mysql` module
+
+To inject an augmented `mysql` module (e.g., wrapped for tracing), an additional `mysql`
+property can be passed in as part of the `config` object. E.g., for using an
+[`AWS X-Ray` wrapped `mysql` implementation](https://docs.aws.amazon.com/xray/latest/devguide/xray-sdk-nodejs-sqlclients.html)
+use something like this:
+```javascript
+var AWSXRay   = require('aws-xray-sdk');
+var mysqlXRay = AWSXRay.captureMySQL(require('mysql'));
+var mysql     = require('promise-mysql');
+var connection;
+
+mysql.createConnection({
+    mysql: mysqlXRay,
+    host: 'localhost',
+    user: 'sauron',
+    password: 'theonetruering',
+    database: 'mordor'
+}).then(function(conn){
+    connection = conn;
+});
+```
+
 #### Using/Disposer Pattern with Pool
 Example implementing a using/disposer pattern using Bluebird's built-in `using` and `disposer` functions.
 
