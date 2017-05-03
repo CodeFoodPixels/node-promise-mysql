@@ -5,12 +5,15 @@ var pool;
 
 describe('The connection pool', function() {
 
-    before('Connecting to MySQL', function() {
-        pool = mysql.createPool({
+    before('Connecting to MySQL', function(done) {
+        mysql.createPool({
             host: process.env.DB_HOST,
             user: process.env.DB_USER,
             password: process.env.DB_PWD,
             connectionLimit: 10,
+        }).then(function(poolObj){
+            pool = poolObj;
+            done();
         });
     });
 
@@ -29,19 +32,21 @@ describe('The connection pool', function() {
     });
 
     it('should release a connection without errors - releaseconnection', function(done) {
-        var pool = mysql.createPool({
-            host: process.env.DB_HOST,
-            user: process.env.DB_USER,
-            password: process.env.DB_PWD,
-            connectionLimit: 1,
-        });
-
         //We need to track the order of execution here,
         //We should get the 2nd connection after the first one
         //was released successfully.
         var seq = 0;
 
-        pool.getConnection().then(function(con) {
+        mysql.createPool({
+            host: process.env.DB_HOST,
+            user: process.env.DB_USER,
+            password: process.env.DB_PWD,
+            connectionLimit: 1,
+        }).then(function(poolObj){
+            pool = poolObj;
+
+            return pool.getConnection();
+        }).then(function(con) {
             expect(++seq).to.be.equal(1);
 
             pool.getConnection().then(function(con) {
