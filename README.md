@@ -158,8 +158,8 @@ sqlQuery.js:
 var Promise = require("bluebird");
 var getSqlConnection = require('./databaseConnection');
 Promise.using(getSqlConnection(), function(connection) {
-    return connection.query('select `name` from hobbits').then(function(row) {
-      return process(rows);
+    return connection.query('select `name` from hobbits').then(function(rows) {
+      return console.log(rows);
     }).catch(function(error) {
       console.log(error);
     });
