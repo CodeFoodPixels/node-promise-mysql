@@ -96,7 +96,7 @@ mysql.createConnection({
     connection.end();
     return result;
 }).catch(function(error){
-    if (connection.end) connection.end();
+    if (connection && connection.end) connection.end();
     //logs out the error
     console.log(error);
 });
