@@ -18,10 +18,11 @@ At the minute only the standard connection (using `.createConnection()`) and the
 
 ### Connection
 
+**Important note: don't forget to call connection.end() when you're finished otherwise the Node process won't finish**
+
 To connect, you simply call `.createConnection()` like you would on mysqljs/mysql:
 ```javascript
 var mysql = require('promise-mysql');
-var connection;
 
 mysql.createConnection({
     host: 'localhost',
@@ -29,14 +30,14 @@ mysql.createConnection({
     password: 'theonetruering',
     database: 'mordor'
 }).then(function(conn){
-    connection = conn;
+    // do stuff with conn
+    conn.end();
 });
 ```
 
 To use the promise, you call the methods as you would if you were just using mysqljs/mysql, minus the callback. You then add a .then() with your function in:
 ```javascript
 var mysql = require('promise-mysql');
-var connection;
 
 mysql.createConnection({
     host: 'localhost',
@@ -44,9 +45,9 @@ mysql.createConnection({
     password: 'theonetruering',
     database: 'mordor'
 }).then(function(conn){
-    connection = conn;
-
-    return connection.query('select `name` from hobbits');
+    var result = conn.query('select `name` from hobbits');
+    conn.end();
+    return result;
 }).then(function(rows){
     // Logs out a list of hobbits
     console.log(rows);
@@ -65,11 +66,12 @@ mysql.createConnection({
     database: 'mordor'
 }).then(function(conn){
     connection = conn;
-
     return connection.query('select `id` from hobbits where `name`="frodo"');
 }).then(function(rows){
     // Query the items for a ring that Frodo owns.
-    return connection.query('select * from items where `owner`="' + rows[0].id + '" and `name`="ring"');
+    var result = connection.query('select * from items where `owner`="' + rows[0].id + '" and `name`="ring"');
+    connection.end();
+    return result;
 }).then(function(rows){
     // Logs out a ring that Frodo owns
     console.log(rows);
@@ -88,11 +90,13 @@ mysql.createConnection({
     database: 'mordor'
 }).then(function(conn){
     connection = conn;
-
     return connection.query('select * from tablethatdoesnotexist');
 }).then(function(){
-    return connection.query('select * from hobbits');
+    var result = connection.query('select * from hobbits');
+    connection.end();
+    return result;
 }).catch(function(error){
+    if (connection && connection.end) connection.end();
     //logs out the error
     console.log(error);
 });
