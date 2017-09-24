@@ -28,7 +28,7 @@ describe('The connection pool', function() {
         });
     });
 
-    it('should release a connection without errors', function(done) {
+    it('should release a connection without errors - releaseconnection', function(done) {
         var pool = mysql.createPool({
             host: process.env.DB_HOST,
             user: process.env.DB_USER,
@@ -63,5 +63,42 @@ describe('The connection pool', function() {
             done(err);
         });
     });
+
+    it('should release a connection without errors - release', function(done) {
+        var pool = mysql.createPool({
+            host: process.env.DB_HOST,
+            user: process.env.DB_USER,
+            password: process.env.DB_PWD,
+            connectionLimit: 1,
+        });
+
+        //We need to track the order of execution here,
+        //We should get the 2nd connection after the first one
+        //was released successfully.
+        var seq = 0;
+
+        pool.getConnection().then(function(con) {
+            expect(++seq).to.be.equal(1);
+
+            pool.getConnection().then(function(con) {
+                expect(++seq).to.be.equal(3);
+                con.release();
+                pool.end();
+                done();
+            }).catch(function(err) {
+                pool.end();
+                done(err);
+            });
+
+            process.nextTick(function(arguments) {
+                expect(++seq).to.be.equal(2);
+                con.release();
+            });
+
+        }).catch(function(err) {
+            done(err);
+        });
+    });
+
 
 });
