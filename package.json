@@ -4,7 +4,7 @@
   "description": "A bluebird wrapper for node-mysql",
   "main": "index.js",
   "scripts": {
-    "test": "./node_modules/mocha/bin/_mocha -R spec"
+    "test": "mocha --exit"
   },
   "repository": {
     "type": "git",
@@ -41,6 +41,6 @@
   },
   "devDependencies": {
     "chai": "^4.0.1",
-    "mocha": "^4.0.0"
+    "mocha": "^4.0.1"
   }
 }
