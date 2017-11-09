@@ -36,11 +36,11 @@
     "url": "https://github.com/lukeb-uk/node-promise-mysql/issues"
   },
   "dependencies": {
+    "@types/mysql": "^2.15.0",
     "bluebird": "^3.5.0",
     "mysql": "^2.14.1"
   },
   "devDependencies": {
-    "@types/mysql": "^2.15.0",
     "chai": "^4.0.1",
     "mocha": "^4.0.1"
   }
