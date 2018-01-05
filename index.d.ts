@@ -43,9 +43,9 @@ export interface Connection {
 }
 
 export interface PoolConnection extends Connection {
-    release(): Promise<any>;
+    release(): any;
 
-    destroy(): Promise<any>;
+    destroy(): any;
 }
 
 export interface Pool {
