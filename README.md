@@ -176,6 +176,11 @@ Promise.using(getSqlConnection(), function(connection) {
 At the moment only simple basics tests are implemented using Mocha.
 To run the tests, you need to connect to a running MySQL server. A database or write permissions are not required.
 
+If you have docker, you can run a docker container bound to the mysql port with the command:
+```bash
+docker run -p 3306:3306 --name mysql_container -e MYSQL_ROOT_PASSWORD=password -d mysql
+```
+
 Start the test suite with
 
 ```bash
