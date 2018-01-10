@@ -1,33 +1,34 @@
 import * as mysql from 'mysql';
+import * as Bluebird from 'bluebird';
 
-export function createConnection(connectionUri: string | mysql.ConnectionConfig): Promise<Connection>;
+export function createConnection(connectionUri: string | mysql.ConnectionConfig): Bluebird<Connection>;
 
 export function createPool(config: mysql.PoolConfig | string): Pool;
 
 export { Types, escape, escapeId, format } from 'mysql';
 
 export interface QueryFunction {
-    (query: mysql.Query | string | mysql.QueryOptions): Promise<any>;
+    (query: mysql.Query | string | mysql.QueryOptions): Bluebird<any>;
 
-    (options: string, values: any): Promise<any>;
+    (options: string, values: any): Bluebird<any>;
 }
 
 export interface Connection {
     query: QueryFunction;
 
-    beginTransaction(options?: mysql.QueryOptions): Promise<void>;
+    beginTransaction(options?: mysql.QueryOptions): Bluebird<void>;
 
-    commit(options?: mysql.QueryOptions): Promise<void>;
+    commit(options?: mysql.QueryOptions): Bluebird<void>;
 
-    rollback(options?: mysql.QueryOptions): Promise<void>;
+    rollback(options?: mysql.QueryOptions): Bluebird<void>;
 
-    changeUser(options?: mysql.QueryOptions): Promise<void>;
+    changeUser(options?: mysql.QueryOptions): Bluebird<void>;
 
-    ping(options?: mysql.QueryOptions): Promise<void>;
+    ping(options?: mysql.QueryOptions): Bluebird<void>;
 
-    statistics(options?: mysql.QueryOptions): Promise<void>;
+    statistics(options?: mysql.QueryOptions): Bluebird<void>;
 
-    end(options?: mysql.QueryOptions): Promise<void>;
+    end(options?: mysql.QueryOptions): Bluebird<void>;
 
     destroy(): void;
 
@@ -49,15 +50,15 @@ export interface PoolConnection extends Connection {
 }
 
 export interface Pool {
-    getConnection(): Promise<PoolConnection>;
+    getConnection(): Bluebird<PoolConnection>;
 
     releaseConnection(connection: PoolConnection): void;
 
     query: QueryFunction;
 
-    end(options?: mysql.QueryOptions): Promise<void>;
+    end(options?: mysql.QueryOptions): Bluebird<void>;
 
-    release(options?: mysql.QueryOptions): Promise<void>;
+    release(options?: mysql.QueryOptions): Bluebird<void>;
 
     escape(value: any, stringifyObjects?: boolean, timeZone?: string): string;
 
