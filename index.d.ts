@@ -5,7 +5,7 @@ export function createConnection(connectionUri: string | mysql.ConnectionConfig)
 
 export function createPool(config: mysql.PoolConfig | string): Pool;
 
-export { Types, escape, escapeId, format } from 'mysql';
+export { Types, escape, escapeId, format, ConnectionOptions, ConnectionConfig, PoolConfig } from 'mysql';
 
 export interface QueryFunction {
     (query: mysql.Query | string | mysql.QueryOptions): Bluebird<any>;
@@ -22,7 +22,7 @@ export interface Connection {
 
     rollback(options?: mysql.QueryOptions): Bluebird<void>;
 
-    changeUser(options?: mysql.QueryOptions): Bluebird<void>;
+    changeUser(options?: mysql.ConnectionOptions): Bluebird<void>;
 
     ping(options?: mysql.QueryOptions): Bluebird<void>;
 
