@@ -26,6 +26,8 @@ export interface Connection {
 
     ping(options?: mysql.QueryOptions): Bluebird<void>;
 
+    queryStream(sql: string, values: any): mysql.Query;
+
     statistics(options?: mysql.QueryOptions): Bluebird<void>;
 
     end(options?: mysql.QueryOptions): Bluebird<void>;
