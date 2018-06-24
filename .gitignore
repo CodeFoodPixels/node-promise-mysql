@@ -30,3 +30,4 @@ node_modules
 .tern-project
 .jscsrc
 .DS_Store
+.nyc_output
