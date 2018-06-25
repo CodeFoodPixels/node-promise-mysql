@@ -6,7 +6,8 @@
   "scripts": {
     "tap": "tap",
     "test": "tap test/*.js --100",
-    "coverage": "tap test/*.js --coverage-report=html"
+    "coverage": "tap test/*.js --coverage-report=html",
+    "updatesnapshots": "TAP_SNAPSHOT=1 npm run test"
   },
   "repository": {
     "type": "git",

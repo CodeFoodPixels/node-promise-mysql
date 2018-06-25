@@ -20,14 +20,13 @@ tap.test(`promiseCallback returns a promise and calls the defined function`, (t)
 tap.test(`promiseCallback resolves the promise to an array if returnArgumentsArray is true`, (t) => {
     const callback = sinon.stub()
     const promiseCallback = helper.promiseCallback.apply({
-        test: sinon.stub().callsArgWith(0, undefined, 1, 2, 3)
+        test: sinon.stub().callsArgWith(0, undefined, 1, 2, 3).returns('returnValue')
     }, [ `test`, [], true ]);
 
     t.ok(promiseCallback.then, `promise has been returned`);
 
     promiseCallback.then((value) => {
-        t.ok(Array.isArray(value), `promise resolves with an array`)
-        t.equal(value.length, 4, `array is of expected length`)
+        t.matchSnapshot(value, `promise resolves to an array`);
         t.end();
     })
 
