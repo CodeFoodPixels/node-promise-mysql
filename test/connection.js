@@ -70,9 +70,7 @@ tap.test(`It should create a new connection`, (t) => {
                     );
                     t.ok(connectionProxy[s[0]].calledWith(...s[1]));
                     t.end();
-                }).catch((err) => {
-                    console.log(err)
-                })
+                });
             });
         });
 
