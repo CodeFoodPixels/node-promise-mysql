@@ -7,14 +7,14 @@ export function createPool(config: mysql.PoolConfig | string): Pool;
 
 export { Types, escape, escapeId, format, ConnectionOptions, ConnectionConfig, PoolConfig } from 'mysql';
 
-export interface QueryFunction {
-    (query: mysql.Query | string | mysql.QueryOptions): Bluebird<any>;
+export interface QueryFunction<T> {
+    (query: mysql.Query | string | mysql.QueryOptions): T;
 
-    (options: string, values: any): Bluebird<any>;
+    (options: string, values: any): T;
 }
 
 export interface Connection {
-    query: QueryFunction;
+    query: QueryFunction<Bluebird<any>>;
 
     beginTransaction(options?: mysql.QueryOptions): Bluebird<void>;
 
@@ -26,7 +26,7 @@ export interface Connection {
 
     ping(options?: mysql.QueryOptions): Bluebird<void>;
 
-    queryStream(sql: string, values: any): mysql.Query;
+    queryStream: QueryFunction<mysql.Query>
 
     statistics(options?: mysql.QueryOptions): Bluebird<void>;
 
@@ -56,7 +56,7 @@ export interface Pool {
 
     releaseConnection(connection: PoolConnection): void;
 
-    query: QueryFunction;
+    query: QueryFunction<Bluebird<any>>;
 
     end(options?: mysql.QueryOptions): Bluebird<void>;
 
