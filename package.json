@@ -39,7 +39,7 @@
     "@types/mysql": "^2.15.2",
     "@types/bluebird": "^3.5.26",
     "bluebird": "^3.5.0",
-    "mysql": "^2.14.1"
+    "mysql": "^2.17.1"
   },
   "devDependencies": {
     "chai": "^4.0.1",
