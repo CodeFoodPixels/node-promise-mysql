@@ -74,7 +74,7 @@ tap.test(`it should allow you to wrap mysql`, (t) => {
         };
 
         return new pool({
-            wrapper: (mysql) => {
+            mysqlWrapper: (mysql) => {
                 t.equal(mysql, mysqlMock, `proxy should be passed to the wrapper`);
                 return wrappedMysqlProxy;
             }
@@ -90,7 +90,7 @@ tap.test(`it should allow you to wrap mysql`, (t) => {
         };
 
         return new pool({
-            wrapper: (mysql) => {
+            mysqlWrapper: (mysql) => {
                 t.equal(mysql, mysqlMock, `proxy should be passed to the wrapper`);
                 return bluebird.resolve(wrappedMysqlProxy);
             }
@@ -102,7 +102,7 @@ tap.test(`it should allow you to wrap mysql`, (t) => {
 
     t.test(`returning a rejected promise`, (t) => {
         return new pool({
-            wrapper: (mysql) => {
+            mysqlWrapper: (mysql) => {
                 t.equal(mysql, mysqlMock, `proxy should be passed to the wrapper`);
                 return bluebird.reject(`faaaaaaail`);
             }
@@ -118,7 +118,7 @@ tap.test(`it should allow you to wrap mysql`, (t) => {
         };
 
         return new pool({
-            wrapper: (mysql, callback) => {
+            mysqlWrapper: (mysql, callback) => {
                 t.equal(mysql, mysqlMock, `proxy should be passed to the wrapper`);
                 callback(null, wrappedMysqlProxy);
             }
@@ -134,7 +134,7 @@ tap.test(`it should allow you to wrap mysql`, (t) => {
         };
 
         return new pool({
-            wrapper: (mysql, callback) => {
+            mysqlWrapper: (mysql, callback) => {
                 t.equal(mysql, mysqlMock, `proxy should be passed to the wrapper`);
                 callback(`faaaaaaail`);
             }

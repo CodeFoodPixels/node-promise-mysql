@@ -1,211 +1,72 @@
 Promise-mysql
 ==================
 [![Build Status](https://travis-ci.org/lukeb-uk/node-promise-mysql.svg?style=flat&branch=master)](https://travis-ci.org/lukeb-uk/node-promise-mysql?branch=master)
+[![Greenkeeper badge](https://badges.greenkeeper.io/lukeb-uk/node-promise-mysql.svg)](https://greenkeeper.io/)
 
-Promise-mysql is a wrapper for [mysqljs/mysql](https://github.com/mysqljs/mysql) that wraps function calls with [Bluebird](https://github.com/petkaantonov/bluebird/) promises. Usually this would be done with Bluebird's `.promisifyAll()` method, but mysqljs/mysql's footprint is different to that of what Bluebird expects.
+Promise-mysql is a wrapper for [mysqljs/mysql](https://github.com/mysqljs/mysql) that wraps function calls with [Bluebird](https://github.com/petkaantonov/bluebird/) promises.
 
-To install promise-mysql, use [npm](http://github.com/isaacs/npm):
+## API
 
-```bash
-$ npm install promise-mysql
-```
+### mysql.createConnection(connectionOptions)
+This will return a the promise of a [connection](#connection) object.
 
-Please refer to [mysqljs/mysql](https://github.com/mysqljs/mysql) for documentation on how to use the mysql functions and refer to [Bluebird](https://github.com/petkaantonov/bluebird/) for documentation on Bluebird's promises
+#### Parameters
+`connectionOptions` _object_: A [connectionOptions](#connectionOptions) object
 
-At the minute only the standard connection (using `.createConnection()`) and the pool (using `.createPool()`) is supported. `createPoolCluster` is not implemented yet.
+#### Return value
+A Bluebird `Promise` that resolves to a [connection](#connection) object
 
-## Examples
+### mysql.createPool(connectionOptions)
+This will return a the promise of a [pool](#pool) object.
 
-### Connection
+#### Parameters
+`connectionOptions` _object_: A [connectionOptions](#connectionOptions) object
 
-**Important note: don't forget to call connection.end() when you're finished otherwise the Node process won't finish**
+#### Return value
+A Bluebird `Promise` that resolves to a [pool](#pool) object
 
-To connect, you simply call `.createConnection()` like you would on mysqljs/mysql:
-```javascript
-var mysql = require('promise-mysql');
+### connectionOptions object
 
-mysql.createConnection({
-    host: 'localhost',
-    user: 'sauron',
-    password: 'theonetruering',
-    database: 'mordor'
-}).then(function(conn){
-    // do stuff with conn
-    conn.end();
-});
-```
+In addition to the [connection options in mysqljs/mysql](https://github.com/mysqljs/mysql#connection-options), promise-mysql accepts the following:
 
-To use the promise, you call the methods as you would if you were just using mysqljs/mysql, minus the callback. You then add a .then() with your function in:
-```javascript
-var mysql = require('promise-mysql');
+`returnArgumentsArray` _boolean_: If set to true then methods will return an array with the return value and the callback arguments from the underlying method.
 
-mysql.createConnection({
-    host: 'localhost',
-    user: 'sauron',
-    password: 'theonetruering',
-    database: 'mordor'
-}).then(function(conn){
-    var result = conn.query('select `name` from hobbits');
-    conn.end();
-    return result;
-}).then(function(rows){
-    // Logs out a list of hobbits
-    console.log(rows);
-});
-```
+`mysqlWrapper` _function_: A function that is passed the `mysql` object so that it can be wrapped with something like the [aws-xray-sdk module](https://www.npmjs.com/package/aws-xray-sdk). This function must either return the wrapped `mysql` object, return a promise of the wrapped `mysql` object or call the callback that is passed into the function.
 
-You can even chain the promises, using a return within the .then():
-```javascript
-var mysql = require('promise-mysql');
-var connection;
+#### Function arguments
 
-mysql.createConnection({
-    host: 'localhost',
-    user: 'sauron',
-    password: 'theonetruering',
-    database: 'mordor'
-}).then(function(conn){
-    connection = conn;
-    return connection.query('select `id` from hobbits where `name`="frodo"');
-}).then(function(rows){
-    // Query the items for a ring that Frodo owns.
-    var result = connection.query('select * from items where `owner`="' + rows[0].id + '" and `name`="ring"');
-    connection.end();
-    return result;
-}).then(function(rows){
-    // Logs out a ring that Frodo owns
-    console.log(rows);
-});
-```
+`mysql` _mysql object_: The mysql object
 
-You can catch errors using the .catch() method. You can still add .then() clauses, they'll just get skipped if there's an error
-```javascript
-var mysql = require('promise-mysql');
-var connection;
+`callback(error, success)` _function_: A node-style callback that can be used to pass the wrapped version of the mysql object out of the wrapper function.
 
-mysql.createConnection({
-    host: 'localhost',
-    user: 'sauron',
-    password: 'theonetruering',
-    database: 'mordor'
-}).then(function(conn){
-    connection = conn;
-    return connection.query('select * from tablethatdoesnotexist');
-}).then(function(){
-    var result = connection.query('select * from hobbits');
-    connection.end();
-    return result;
-}).catch(function(error){
-    if (connection && connection.end) connection.end();
-    //logs out the error
-    console.log(error);
-});
+### Connection object methods
 
-```
+`connection.query`: Perform a query. See [mysqljs/mysql documentation](https://github.com/mysqljs/mysql#performing-queries)
 
-### Pool
+`connection.queryStream`: Perform a query, but return the query object for streaming. See [mysqljs/mysql documentation](https://github.com/mysqljs/mysql#streaming-query-rows)
 
-Use pool directly:
+`connection.beginTransaction`: Begin a transaction. See [mysqljs/mysql documentation](https://github.com/mysqljs/mysql#transactions)
 
-```javascript
-pool = mysql.createPool({
-  host: 'localhost',
-  user: 'sauron',
-  password: 'theonetruering',
-  database: 'mordor',
-  connectionLimit: 10
-});
+`connection.commit`: Commit a transaction. See [mysqljs/mysql documentation](https://github.com/mysqljs/mysql#transactions)
 
-pool.query('select `name` from hobbits').then(function(rows){
-    // Logs out a list of hobbits
-    console.log(rows);
-});
+`connection.rollback`: Roll back a transaction. See [mysqljs/mysql documentation](https://github.com/mysqljs/mysql#transactions)
 
-```
+`connection.changeUser`: Change the current connected user. See [mysqljs/mysql documentation](https://github.com/mysqljs/mysql#switching-users-and-altering-connection-state)
 
-Get a connection from the pool:
+`connection.ping`: Send a ping to the server. See [mysqljs/mysql documentation](https://github.com/mysqljs/mysql#ping)
 
-```javascript
-pool.getConnection().then(function(connection) {
-    connection.query('select `name` from hobbits').then(...)
-}).catch(function(err) {
-    done(err);
-});
-```
+`connection.end`: End the connection. See [mysqljs/mysql documentation](https://github.com/mysqljs/mysql#terminating-connections)
 
-#### Using/Disposer Pattern with Pool
-Example implementing a using/disposer pattern using Bluebird's built-in `using` and `disposer` functions.
+`connection.destroy`: Destroy the connection. See [mysqljs/mysql documentation](https://github.com/mysqljs/mysql#terminating-connections)
 
-databaseConnection.js:
-```javascript
-var mysql = require('promise-mysql');
+`connection.pause`: Pause a connection. See [mysqljs/mysql documentation](https://github.com/mysqljs/mysql#streaming-query-rows)
 
-pool = mysql.createPool({
-  host: 'localhost',
-  user: 'sauron',
-  password: 'theonetruering',
-  database: 'mordor',
-  connectionLimit: 10
-});
+`connection.resume`: Resume a connection. See [mysqljs/mysql documentation](https://github.com/mysqljs/mysql#streaming-query-rows)
 
-function getSqlConnection() {
-  return pool.getConnection().disposer(function(connection) {
-    pool.releaseConnection(connection);
-  });
-}
+`connection.escape`: Escape query values. See [mysqljs/mysql documentation](https://github.com/mysqljs/mysql#escaping-query-values)
 
-module.exports = getSqlConnection;
-```
+`connection.escapeId`: Escape query identifiers. See [mysqljs/mysql documentation](https://github.com/mysqljs/mysql#escaping-query-identifiers)
 
-sqlQuery.js:
-```javascript
-var Promise = require("bluebird");
-var getSqlConnection = require('./databaseConnection');
-Promise.using(getSqlConnection(), function(connection) {
-    return connection.query('select `name` from hobbits').then(function(rows) {
-      return console.log(rows);
-    }).catch(function(error) {
-      console.log(error);
-    });
-})
-```
+`connection.format`: Prepare a query. See [mysqljs/mysql documentation](https://github.com/mysqljs/mysql#preparing-queriess)
 
-
-## Tests
-
-At the moment only simple basics tests are implemented using Mocha.
-To run the tests, you need to connect to a running MySQL server. A database or write permissions are not required.
-
-If you have docker, you can run a docker container bound to the mysql port with the command:
-```bash
-docker run -p 3306:3306 --name mysql_container -e MYSQL_ROOT_PASSWORD=password -d mysql
-```
-
-Start the test suite with
-
-```bash
-DB_HOST=localhost DB_USER=user DB_PWD=pwd npm test
-```
-
-## License
-
-The MIT License (MIT)
-
-Copyright (c) 2014 Luke Bonaccorsi
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
-the Software, and to permit persons to whom the Software is furnished to do so,
-subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
-FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
-COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
-IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
-CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+`connection.on`: Add a listener to the connection object. See [mysqljs/mysql documentation](https://github.com/mysqljs/mysql) for events that may be listened for.
