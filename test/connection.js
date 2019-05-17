@@ -317,7 +317,7 @@ tap.test(`it should allow you to wrap mysql`, (t) => {
         };
 
         const connection = getConnection({}, {
-            wrapper: (mysql) => {
+            mysqlWrapper: (mysql) => {
                 t.equal(mysql, mysqlProxy, `proxy should be passed to the wrapper`);
                 return wrappedMysqlProxy;
             }
@@ -338,7 +338,7 @@ tap.test(`it should allow you to wrap mysql`, (t) => {
         };
 
         const connection = getConnection({}, {
-            wrapper: (mysql) => {
+            mysqlWrapper: (mysql) => {
                 t.equal(mysql, mysqlProxy, `proxy should be passed to the wrapper`);
                 return bluebird.resolve(wrappedMysqlProxy);
             }
@@ -359,7 +359,7 @@ tap.test(`it should allow you to wrap mysql`, (t) => {
         };
 
         const connection = getConnection({}, {
-            wrapper: (mysql) => {
+            mysqlWrapper: (mysql) => {
                 t.equal(mysql, mysqlProxy, `proxy should be passed to the wrapper`);
                 return bluebird.reject(`faaaaaaail`);
             }
@@ -379,7 +379,7 @@ tap.test(`it should allow you to wrap mysql`, (t) => {
         };
 
         const connection = getConnection({}, {
-            wrapper: (mysql, callback) => {
+            mysqlWrapper: (mysql, callback) => {
                 t.equal(mysql, mysqlProxy, `proxy should be passed to the wrapper`);
                 callback(null, wrappedMysqlProxy);
             }
@@ -400,7 +400,7 @@ tap.test(`it should allow you to wrap mysql`, (t) => {
         };
 
         const connection = getConnection({}, {
-            wrapper: (mysql, callback) => {
+            mysqlWrapper: (mysql, callback) => {
                 t.equal(mysql, mysqlProxy, `proxy should be passed to the wrapper`);
                 callback(`faaaaaaail`);
             }
