@@ -10,8 +10,8 @@ sinon.addBehavior(`callsLastArgWith`, (fake, errVal, retVal) => {
 
 const constructorSpy = sinon.spy();
 const connectionMock = {
-    release: sinon.stub().callsLastArgWith(null, `releasePromise`).returns(`releaseReturn`),
-    destroy: sinon.stub().callsLastArgWith(null, `destroyPromise`).returns(`destroyReturn`)
+    release: sinon.stub().returns(`releaseReturn`),
+    destroy: sinon.stub().returns(`destroyReturn`)
 };
 
 const poolConnection = proxyquire(`../lib/poolConnection.js`, {
@@ -53,23 +53,22 @@ tap.test(`constructor is called`, (t) => {
 tap.test(`calls the underlying methods`, (t) => {
     const connection = new poolConnection();
 
-    const promiseSpec = [
-        [`release`, []],
-        [`destroy`, []]
+    const callSpec = [
+        {method: `release`, args: []},
+        {method: `destroy`, args: []}
     ];
 
-    promiseSpec.forEach((s) => {
-        t.test(`connection.${s[0]} should call the underlying ${s[0]} method with the correct arguments`, (t) => {
-            connection[s[0]](...s[1]).then(() => {
-                t.ok(connectionMock[s[0]].calledOnce, `underlying ${s[0]} method called`)
-                t.equal(
-                    connectionMock[s[0]].lastCall.args.length,
-                    s[1].length + 1,
-                    `underlying ${s[0]} called with correct number of arguments`
-                );
-                t.ok(connectionMock[s[0]].calledWith(...s[1]));
-                t.end();
-            });
+    callSpec.forEach((spec) => {
+        t.test(`connection.${spec.method} should call the underlying ${spec.method} method with the correct arguments`, (t) => {
+            connection[spec.method](...spec.args)
+            t.ok(connectionMock[spec.method].calledOnce, `underlying ${spec.method} method called`)
+            t.equal(
+                connectionMock[spec.method].lastCall.args.length,
+                spec.args.length,
+                `underlying ${spec.method} called with correct number of arguments`
+            );
+            t.ok(connectionMock[spec.method].calledWith(...spec.args));
+            t.end();
         });
     });
 
