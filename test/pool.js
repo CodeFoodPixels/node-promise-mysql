@@ -200,7 +200,7 @@ tap.test(`calls the underlying methods`, (t) => {
                     t.same(
                         retVal,
                         `${spec.method}Promise`,
-                        `returns arguments array`
+                        `returns arguments`
                     );
                     t.ok(poolMock[spec.method].calledWith(...spec.args));
                     t.end();
@@ -243,6 +243,43 @@ tap.test(`calls the underlying methods`, (t) => {
             );
 
             t.end();
+        });
+
+        t.end();
+    });
+})
+
+tap.test(`returns an argument array`, (t) => {
+    return new pool({returnArgumentsArray: true}).then((pool) => {
+
+        const promiseSpec = [{
+                method: `query`,
+                args: [`test`, [`test`]]
+            },
+            {
+                method: `end`,
+                args: []
+            }
+        ];
+
+        promiseSpec.forEach((spec) => {
+            t.test(`pool.${spec.method} should call the underlying ${spec.method} method with the correct arguments`, (t) => {
+                return pool[spec.method](...spec.args).then((retVal) => {
+                    t.ok(poolMock[spec.method].calledOnce, `underlying ${spec.method} method called`)
+                    t.equal(
+                        poolMock[spec.method].lastCall.args.length,
+                        spec.args.length + 1,
+                        `underlying ${spec.method} called with correct number of arguments`
+                    );
+                    t.same(
+                        retVal,
+                        [`${spec.method}Promise`, `${spec.method}Return`],
+                        `returns arguments array`
+                    );
+                    t.ok(poolMock[spec.method].calledWith(...spec.args));
+                    t.end();
+                });
+            });
         });
 
         t.end();
