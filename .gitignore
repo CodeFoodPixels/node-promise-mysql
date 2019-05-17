@@ -31,3 +31,4 @@ node_modules
 .jscsrc
 .DS_Store
 .nyc_output
+.vscode
