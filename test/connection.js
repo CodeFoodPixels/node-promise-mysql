@@ -104,8 +104,17 @@ tap.test(`It should create a new connection`, (t) => {
             t.end();
         });
 
+        t.test(`connection.on should call the underlying on method with the correct arguments`, (t) => {
+            const handler = sinon.spy();
+            connection.on(`test`, handler);
+
+            connectionProxy.emit(`test`);
+            t.ok(handler.calledOnce, `handler is called`);
+            t.end();
+        });
+
         t.test(`connection.queryStream should call the underlying query method with the correct arguments`, (t) => {
-            const connection = getConnection({
+            return getConnection({
                 query: sinon.stub().returns(`queryReturn`)
             }).then((connection) => {
                 const value = connection.queryStream(`test`, [`test`]);
@@ -114,9 +123,6 @@ tap.test(`It should create a new connection`, (t) => {
                 t.equal(value, `queryReturn`, `returns value from underlying function`);
                 t.end();
             });
-
-            return connection;
-            // t.end();
         });
 
         t.end();
@@ -187,7 +193,7 @@ tap.test(`It should work with a passed connection`, (t) => {
         });
 
         t.test(`connection.queryStream should call the underlying query method with the correct arguments`, (t) => {
-            const connection = getConnection({
+            return getConnection({
                 query: sinon.stub().returns(`queryReturn`)
             }, {}, true).then((connection) => {
                 const value = connection.queryStream(`test`, [`test`]);
@@ -196,8 +202,6 @@ tap.test(`It should work with a passed connection`, (t) => {
                 t.equal(value, `queryReturn`, `returns value from underlying function`);
                 t.end();
             });
-
-            return connection;
         });
 
         t.end();
