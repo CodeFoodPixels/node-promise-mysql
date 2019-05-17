@@ -49,49 +49,49 @@ tap.test(`It should create a new connection`, (t) => {
         t.ok(connectionProxy.connect.calledOnce, `connection.connect should only be called once`);
 
         const promiseSpec = [
-            [`query`, [`test`, [`test`]]],
-            [`beginTransaction`, []],
-            [`commit`, []],
-            [`rollback`, []],
-            [`changeUser`, [{user: `test`}]],
-            [`ping`, []],
-            [`statistics`, [{option: `test`}]],
-            [`end`, []]
+            {method: `query`, args: [`test`, [`test`]]},
+            {method: `beginTransaction`, args: []},
+            {method: `commit`, args: []},
+            {method: `rollback`, args: []},
+            {method: `changeUser`, args: [{user: `test`}]},
+            {method: `ping`, args: []},
+            {method: `statistics`, args: [{option: `test`}]},
+            {method: `end`, args: []}
         ];
 
-        promiseSpec.forEach((s) => {
-            t.test(`connection.${s[0]} should call the underlying ${s[0]} method with the correct arguments`, (t) => {
-                connection[s[0]](...s[1]).then(() => {
-                    t.ok(connectionProxy[s[0]].calledOnce, `underlying ${s[0]} method called`)
+        promiseSpec.forEach((spec) => {
+            t.test(`connection.${spec.method} should call the underlying ${spec.method} method with the correct arguments`, (t) => {
+                connection[spec.method](...spec.args).then(() => {
+                    t.ok(connectionProxy[spec.method].calledOnce, `underlying ${spec.method} method called`)
                     t.equal(
-                        connectionProxy[s[0]].lastCall.args.length,
-                        s[1].length + 1,
-                        `underlying ${s[0]} called with correct number of arguments`
+                        connectionProxy[spec.method].lastCall.args.length,
+                        spec.args.length + 1,
+                        `underlying ${spec.method} called with correct number of arguments`
                     );
-                    t.ok(connectionProxy[s[0]].calledWith(...s[1]));
+                    t.ok(connectionProxy[spec.method].calledWith(...spec.args));
                     t.end();
                 });
             });
         });
 
         const callSpec = [
-            [`destroy`, []],
-            [`pause`, []],
-            [`resume`, []],
-            [`escape`, [`test`]],
-            [`escapeId`, [`testId`]]
+            {method: `destroy`, underlyingMethod: `destroy`, args: []},
+            {method: `pause`, underlyingMethod: `pause`, args: []},
+            {method: `resume`, underlyingMethod: `resume`, args: []},
+            {method: `escape`, underlyingMethod: `escape`, args: [`test`]},
+            {method: `escapeId`, underlyingMethod: `escapeId`, args: [`testId`]},
         ];
 
-        callSpec.forEach((s) => {
-            t.test(`connection.${s[0]} should call the underlying ${s[0]} method with the correct arguments`, (t) => {
-                connection[s[0]](...s[1]);
-                t.ok(connectionProxy[s[0]].calledOnce, `underlying ${s[0]} method called`)
+        callSpec.forEach((spec) => {
+            t.test(`connection.${spec.method} should call the underlying ${spec.underlyingMethod} method with the correct arguments`, (t) => {
+                connection[spec.method](...spec.args);
+                t.ok(connectionProxy[spec.underlyingMethod].calledOnce, `underlying ${spec.underlyingMethod} method called`)
                 t.equal(
-                    connectionProxy[s[0]].lastCall.args.length,
-                    s[1].length,
-                    `underlying ${s[0]} called with correct number of arguments`
+                    connectionProxy[spec.underlyingMethod].lastCall.args.length,
+                    spec.args.length,
+                    `underlying ${spec.underlyingMethod} called with correct number of arguments`
                 );
-                t.ok(connectionProxy[s[0]].calledWith(...s[1]));
+                t.ok(connectionProxy[spec.underlyingMethod].calledWith(...spec.args));
                 t.end();
             });
         });
@@ -102,6 +102,21 @@ tap.test(`It should create a new connection`, (t) => {
             t.ok(connectionProxy.format.calledWithExactly(`test`, `test2`), `underlying format called with correct arguments`);
             t.equal(value, `test`, `returns value from underlying function`);
             t.end();
+        });
+
+        t.test(`connection.queryStream should call the underlying query method with the correct arguments`, (t) => {
+            const connection = getConnection({
+                query: sinon.stub().returns(`queryReturn`)
+            }).then((connection) => {
+                const value = connection.queryStream(`test`, [`test`]);
+                t.ok(connectionProxy.query.calledOnce, `underlying format method called`)
+                t.ok(connectionProxy.query.calledWithExactly(`test`, [`test`]), `underlying query called with correct arguments`);
+                t.equal(value, `queryReturn`, `returns value from underlying function`);
+                t.end();
+            });
+
+            return connection;
+            // t.end();
         });
 
         t.end();
@@ -116,49 +131,49 @@ tap.test(`It should work with a passed connection`, (t) => {
         t.ok(connectionProxy.connect.notCalled, `connection.connect should not be called`);
 
         const promiseSpec = [
-            [`query`, [`test`, [`test`]]],
-            [`beginTransaction`, []],
-            [`commit`, []],
-            [`rollback`, []],
-            [`changeUser`, [{user: `test`}]],
-            [`ping`, []],
-            [`statistics`, [{option: `test`}]],
-            [`end`, []]
+            {method: `query`, args: [`test`, [`test`]]},
+            {method: `beginTransaction`, args: []},
+            {method: `commit`, args: []},
+            {method: `rollback`, args: []},
+            {method: `changeUser`, args: [{user: `test`}]},
+            {method: `ping`, args: []},
+            {method: `statistics`, args: [{option: `test`}]},
+            {method: `end`, args: []}
         ];
 
-        promiseSpec.forEach((s) => {
-            t.test(`connection.${s[0]} should call the underlying ${s[0]} method with the correct arguments`, (t) => {
-                connection[s[0]](...s[1]).then(() => {
-                    t.ok(connectionProxy[s[0]].calledOnce, `underlying ${s[0]} method called`)
+        promiseSpec.forEach((spec) => {
+            t.test(`connection.${spec.method} should call the underlying ${spec.method} method with the correct arguments`, (t) => {
+                connection[spec.method](...spec.args).then(() => {
+                    t.ok(connectionProxy[spec.method].calledOnce, `underlying ${spec.method} method called`)
                     t.equal(
-                        connectionProxy[s[0]].lastCall.args.length,
-                        s[1].length + 1,
-                        `underlying ${s[0]} called with correct number of arguments`
+                        connectionProxy[spec.method].lastCall.args.length,
+                        spec.args.length + 1,
+                        `underlying ${spec.method} called with correct number of arguments`
                     );
-                    t.ok(connectionProxy[s[0]].calledWith(...s[1]));
+                    t.ok(connectionProxy[spec.method].calledWith(...spec.args));
                     t.end();
                 })
             });
         });
 
         const callSpec = [
-            [`destroy`, []],
-            [`pause`, []],
-            [`resume`, []],
-            [`escape`, [`test`]],
-            [`escapeId`, [`testId`]]
+            {method: `destroy`, underlyingMethod: `destroy`, args: []},
+            {method: `pause`, underlyingMethod: `pause`, args: []},
+            {method: `resume`, underlyingMethod: `resume`, args: []},
+            {method: `escape`, underlyingMethod: `escape`, args: [`test`]},
+            {method: `escapeId`, underlyingMethod: `escapeId`, args: [`testId`]}
         ];
 
-        callSpec.forEach((s) => {
-            t.test(`connection.${s[0]} should call the underlying ${s[0]} method with the correct arguments`, (t) => {
-                connection[s[0]](...s[1]);
-                t.ok(connectionProxy[s[0]].calledOnce, `underlying ${s[0]} method called`)
+        callSpec.forEach((spec) => {
+            t.test(`connection.${spec.method} should call the underlying ${spec.underlyingMethod} method with the correct arguments`, (t) => {
+                connection[spec.method](...spec.args);
+                t.ok(connectionProxy[spec.underlyingMethod].calledOnce, `underlying ${spec.underlyingMethod} method called`)
                 t.equal(
-                    connectionProxy[s[0]].lastCall.args.length,
-                    s[1].length,
-                    `underlying ${s[0]} called with correct number of arguments`
+                    connectionProxy[spec.underlyingMethod].lastCall.args.length,
+                    spec.args.length,
+                    `underlying ${spec.underlyingMethod} called with correct number of arguments`
                 );
-                t.ok(connectionProxy[s[0]].calledWith(...s[1]));
+                t.ok(connectionProxy[spec.underlyingMethod].calledWith(...spec.args));
                 t.end();
             });
         });
@@ -169,6 +184,20 @@ tap.test(`It should work with a passed connection`, (t) => {
             t.ok(connectionProxy.format.calledWithExactly(`test`, `test2`), `underlying format called with correct arguments`);
             t.equal(value, `test`, `returns value from underlying function`);
             t.end();
+        });
+
+        t.test(`connection.queryStream should call the underlying query method with the correct arguments`, (t) => {
+            const connection = getConnection({
+                query: sinon.stub().returns(`queryReturn`)
+            }, {}, true).then((connection) => {
+                const value = connection.queryStream(`test`, [`test`]);
+                t.ok(connectionProxy.query.calledOnce, `underlying format method called`)
+                t.ok(connectionProxy.query.calledWithExactly(`test`, [`test`]), `underlying query called with correct arguments`);
+                t.equal(value, `queryReturn`, `returns value from underlying function`);
+                t.end();
+            });
+
+            return connection;
         });
 
         t.end();
@@ -183,31 +212,31 @@ tap.test(`It should return the arguments array`, (t) => {
         t.ok(connectionProxy.connect.calledOnce, `connection.connect should only be called once`);
 
         const promiseSpec = [
-            [`query`, [`test`, [`test`]]],
-            [`beginTransaction`, []],
-            [`commit`, []],
-            [`rollback`, []],
-            [`changeUser`, [{user: `test`}]],
-            [`ping`, []],
-            [`statistics`, [{option: `test`}]],
-            [`end`, []]
+            {method: `query`, args: [`test`, [`test`]]},
+            {method: `beginTransaction`, args: []},
+            {method: `commit`, args: []},
+            {method: `rollback`, args: []},
+            {method: `changeUser`, args: [{user: `test`}]},
+            {method: `ping`, args: []},
+            {method: `statistics`, args: [{option: `test`}]},
+            {method: `end`, args: []}
         ];
 
-        promiseSpec.forEach((s) => {
-            t.test(`connection.${s[0]} should call the underlying ${s[0]} method with the correct arguments`, (t) => {
-                connection[s[0]](...s[1]).then((retVal) => {
-                    t.ok(connectionProxy[s[0]].calledOnce, `underlying ${s[0]} method called`)
+        promiseSpec.forEach((spec) => {
+            t.test(`connection.${spec.method} should call the underlying ${spec.method} method with the correct arguments`, (t) => {
+                connection[spec.method](...spec.args).then((retVal) => {
+                    t.ok(connectionProxy[spec.method].calledOnce, `underlying ${spec.method} method called`)
                     t.equal(
-                        connectionProxy[s[0]].lastCall.args.length,
-                        s[1].length + 1,
-                        `underlying ${s[0]} called with correct number of arguments`
+                        connectionProxy[spec.method].lastCall.args.length,
+                        spec.args.length + 1,
+                        `underlying ${spec.method} called with correct number of arguments`
                     );
                     t.same(
                         retVal,
-                        [`${s[0]}Promise`, `${s[0]}Return`],
+                        [`${spec.method}Promise`, `${spec.method}Return`],
                         `returns arguments array`
                     );
-                    t.ok(connectionProxy[s[0]].calledWith(...s[1]));
+                    t.ok(connectionProxy[spec.method].calledWith(...spec.args));
                     t.end();
                 });
             });
