@@ -7,12 +7,14 @@ export function createPool(config: mysql.PoolConfig | string): Pool;
 
 export { Types, escape, escapeId, format, ConnectionOptions } from 'mysql';
 
+type mysql = typeof mysql;
+
 export interface ConnectionConfig extends mysql.ConnectionConfig {
-    mysqlWrapper: <T>(mysql: T, callback: (err: Error | null, success?: T) => void) => T | Promise<T> | void;
+    mysqlWrapper: (mysql: mysql, callback: (err: Error | null, success?: mysql) => void) => mysql | Promise<mysql> | void;
 }
 
 export interface PoolConfig extends mysql.PoolConfig {
-    mysqlWrapper: <T>(mysql: T, callback: (err: Error | null, success?: T) => void) => T | Promise<T> | void;
+    mysqlWrapper: (mysql: mysql, callback: (err: Error | null, success?: mysql) => void) => mysql | Promise<mysql> | void;
 }
 
 export interface QueryFunction<T> {
