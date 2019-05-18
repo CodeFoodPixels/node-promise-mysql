@@ -8,11 +8,11 @@ export function createPool(config: mysql.PoolConfig | string): Pool;
 export { Types, escape, escapeId, format, ConnectionOptions } from 'mysql';
 
 export interface ConnectionConfig extends mysql.ConnectionConfig {
-    mysqlWrapper: <T>(mysql: T, callback: (err: Error | null, success?: any) => void) => T | Promise<T>;
+    mysqlWrapper: <T>(mysql: T, callback: (err: Error | null, success?: T) => void) => T | Promise<T> | void;
 }
 
 export interface PoolConfig extends mysql.PoolConfig {
-    mysqlWrapper: <T>(mysql: T, callback: (err: Error | null, success?: any) => void) => T | Promise<T>;
+    mysqlWrapper: <T>(mysql: T, callback: (err: Error | null, success?: T) => void) => T | Promise<T> | void;
 }
 
 export interface QueryFunction<T> {
