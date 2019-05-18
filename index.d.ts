@@ -7,7 +7,7 @@ export function createPool(config: mysql.PoolConfig | string): Pool;
 
 export { Types, escape, escapeId, format, ConnectionOptions } from 'mysql';
 
-type mysqlModule = typeof mysql;
+export type mysqlModule = typeof mysql;
 
 export interface ConnectionConfig extends mysql.ConnectionConfig {
     mysqlWrapper: (mysql: mysqlModule, callback: (err: Error | null, success?: mysqlModule) => void) => mysqlModule | Promise<mysqlModule> | void;
