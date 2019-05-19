@@ -67,6 +67,22 @@ In addition to the [connection options in mysqljs/mysql](https://github.com/mysq
 
 `connection.escapeId`: Escape query identifiers. See [mysqljs/mysql documentation](https://github.com/mysqljs/mysql#escaping-query-identifiers)
 
-`connection.format`: Prepare a query. See [mysqljs/mysql documentation](https://github.com/mysqljs/mysql#preparing-queriess)
+`connection.format`: Prepare a query. See [mysqljs/mysql documentation](https://github.com/mysqljs/mysql#preparing-queries)
 
 `connection.on`: Add a listener to the connection object. See [mysqljs/mysql documentation](https://github.com/mysqljs/mysql) for events that may be listened for.
+
+### Pool object methods
+
+`pool.getConnection`: Get a connection from the pool. See [mysqljs/mysql documentation](https://github.com/mysqljs/mysql#pooling-connections)
+
+`pool.releaseConnection`: Release a connection back into the pool. See [mysqljs/mysql documentation](https://github.com/mysqljs/mysql#pooling-connections)
+
+`pool.query`: Get a connection from the pool, run a query and then release it back into the pool. See [mysqljs/mysql documentation](https://github.com/mysqljs/mysql#pooling-connections)
+
+`pool.end`: End all the connections in a pool. See [mysqljs/mysql documentation](https://github.com/mysqljs/mysql#closing-all-the-connections-in-a-pool)
+
+`pool.escape`: Escape query values. See [mysqljs/mysql documentation](https://github.com/mysqljs/mysql#escaping-query-values)
+
+`pool.escapeId`: Escape query identifiers. See [mysqljs/mysql documentation](https://github.com/mysqljs/mysql#escaping-query-identifiers)
+
+`pool.on`: Add a listener to the connection object. See [mysqljs/mysql documentation](https://github.com/mysqljs/mysql#pool-events) for events that may be listened for.
