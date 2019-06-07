@@ -29,7 +29,7 @@ A Bluebird `Promise` that resolves to a [pool](#pool) object
 
 In addition to the [connection options in mysqljs/mysql](https://github.com/mysqljs/mysql#connection-options), promise-mysql accepts the following:
 
-`returnArgumentsArray` _boolean_: If set to true then methods will return an array with the return value and the callback arguments from the underlying method.
+`returnArgumentsArray` _boolean_: If set to true then methods will return an array with the callback arguments from the underlying method (excluding the any errors) and the return value from the call.
 
 `mysqlWrapper` _function_: A function that is passed the `mysql` object so that it can be wrapped with something like the [aws-xray-sdk module](https://www.npmjs.com/package/aws-xray-sdk). This function must either return the wrapped `mysql` object, return a promise of the wrapped `mysql` object or call the callback that is passed into the function.
 
