@@ -3,10 +3,5 @@ node_js:
   - '8'
   - '9'
   - '10'
-  - stable
-before_install:
-# package-lock.json was introduced in npm@5
-  - if [[ `node -v` != v9* ]]; then npm install -g npm@5; fi
-  - npm install -g greenkeeper-lockfile@1
-before_script: greenkeeper-lockfile-update
-after_script: greenkeeper-lockfile-upload
+  - '11'
+  - '12'
