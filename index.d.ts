@@ -3,7 +3,7 @@ import * as Bluebird from 'bluebird';
 
 export function createConnection(connectionUri: string | mysql.ConnectionConfig): Bluebird<Connection>;
 
-export function createPool(config: mysql.PoolConfig | string): Pool;
+export function createPool(config: mysql.PoolConfig | string): Bluebird<Pool>;
 
 export { Types, escape, escapeId, format, ConnectionOptions } from 'mysql';
 
