@@ -47,6 +47,6 @@
   "devDependencies": {
     "proxyquire": "^2.0.1",
     "sinon": "^6.0.0",
-    "tap": "^12.0.1"
+    "tap": "^14.2.3"
   }
 }
