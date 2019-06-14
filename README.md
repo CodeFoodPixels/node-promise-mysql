@@ -86,3 +86,6 @@ In addition to the [connection options in mysqljs/mysql](https://github.com/mysq
 `pool.escapeId`: Escape query identifiers. See [mysqljs/mysql documentation](https://github.com/mysqljs/mysql#escaping-query-identifiers)
 
 `pool.on`: Add a listener to the connection object. See [mysqljs/mysql documentation](https://github.com/mysqljs/mysql#pool-events) for events that may be listened for.
+
+## Upgrading from v3
+As the API is the same, you should be able to upgrade straight to v4. The only real difference is the extra options in the [connectionOptions object](#connectionoptions-object).
