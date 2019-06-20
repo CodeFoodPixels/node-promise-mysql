@@ -10,11 +10,11 @@ export { Types, escape, escapeId, format, ConnectionOptions } from 'mysql';
 export type mysqlModule = typeof mysql;
 
 export interface ConnectionConfig extends mysql.ConnectionConfig {
-    mysqlWrapper: (mysql: mysqlModule, callback: (err: Error | null, success?: mysqlModule) => void) => mysqlModule | Promise<mysqlModule> | void;
+    mysqlWrapper?: (mysql: mysqlModule, callback: (err: Error | null, success?: mysqlModule) => void) => mysqlModule | Promise<mysqlModule> | void;
 }
 
 export interface PoolConfig extends mysql.PoolConfig {
-    mysqlWrapper: (mysql: mysqlModule, callback: (err: Error | null, success?: mysqlModule) => void) => mysqlModule | Promise<mysqlModule> | void;
+    mysqlWrapper?: (mysql: mysqlModule, callback: (err: Error | null, success?: mysqlModule) => void) => mysqlModule | Promise<mysqlModule> | void;
 }
 
 export interface QueryFunction<T> {
