@@ -33,6 +33,8 @@ In addition to the [connection options in mysqljs/mysql](https://github.com/mysq
 
 `mysqlWrapper` _function_: A function that is passed the `mysql` object so that it can be wrapped with something like the [aws-xray-sdk module](https://www.npmjs.com/package/aws-xray-sdk). This function must either return the wrapped `mysql` object, return a promise of the wrapped `mysql` object or call the callback that is passed into the function.
 
+`reconnect` _boolean_ (default: true): If set to true then the connection will reconnect on the `PROTOCOL_CONNECTION_LOST`, `ECONNRESET` and `PROTOCOL_ENQUEUE_AFTER_FATAL_ERROR` errors.
+
 #### Function arguments
 
 `mysql` _mysql object_: The mysql object
