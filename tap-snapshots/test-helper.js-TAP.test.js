@@ -6,5 +6,10 @@
  */
 'use strict'
 exports[`test/helper.js TAP promiseCallback resolves the promise to an array if returnArgumentsArray is true > promise resolves to an array 1`] = `
-[ 1, 2, 3, 'returnValue' ]
+Array [
+  1,
+  2,
+  3,
+  "returnValue",
+]
 `
