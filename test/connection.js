@@ -250,7 +250,7 @@ tap.test(`It should return the arguments array`, (t) => {
     })
 });
 
-tap.test(`it should reconnect if specific error events are fired`, (t) => {
+tap.test(`it should reconnect if specific error events are fired and reconnect is undefined`, (t) => {
     t.test(`PROTOCOL_CONNECTION_LOST`, (t) => {
         const connection = getConnection();
 
@@ -287,11 +287,273 @@ tap.test(`it should reconnect if specific error events are fired`, (t) => {
     t.end();
 });
 
+tap.test(`it should reconnect if specific error events are fired and reconnect is true`, (t) => {
+    t.test(`PROTOCOL_CONNECTION_LOST`, (t) => {
+        const connection = getConnection({}, {
+            reconnect: true
+        });
+
+        connection.then((connection) => {
+            connectionProxy.emit(`error`, {code: `PROTOCOL_CONNECTION_LOST`});
+            t.ok(mysqlProxy.createConnection.calledTwice, `createConnection should be called`);
+            t.ok(connectionProxy.connect.calledTwice, `connection.connect should be called`);
+            t.end();
+        });
+    });
+
+    t.test(`ECONNRESET`, (t) => {
+        const connection = getConnection({}, {
+            reconnect: true
+        });
+
+        connection.then((connection) => {
+            connectionProxy.emit(`error`, {code: `ECONNRESET`});
+            t.ok(mysqlProxy.createConnection.calledTwice, `createConnection should be called`);
+            t.ok(connectionProxy.connect.calledTwice, `connection.connect should be called`);
+            t.end();
+        });
+    });
+
+    t.test(`PROTOCOL_ENQUEUE_AFTER_FATAL_ERROR`, (t) => {
+        const connection = getConnection({}, {
+            reconnect: true
+        });
+
+        connection.then((connection) => {
+            connectionProxy.emit(`error`, {code: `PROTOCOL_ENQUEUE_AFTER_FATAL_ERROR`});
+            t.ok(mysqlProxy.createConnection.calledTwice, `createConnection should be called`);
+            t.ok(connectionProxy.connect.calledTwice, `connection.connect should be called`);
+            t.end();
+        });
+    });
+
+    t.end();
+});
+
+tap.test(`it should not reconnect if specific error events are fired and reconnect is false`, (t) => {
+    t.test(`PROTOCOL_CONNECTION_LOST`, (t) => {
+        const connection = getConnection({}, {
+            reconnect: false
+        });
+
+        connection.then((conn) => {
+            const err = { code: `PROTOCOL_CONNECTION_LOST` };
+            const handler = sinon.spy();
+
+            conn.on(`error`, handler);
+            connectionProxy.emit(`error`, err);
+            t.ok(
+              handler.calledWith(err),
+              `error handler was called with error`
+            );
+            t.ok(mysqlProxy.createConnection.calledOnce, `createConnection should be called once`);
+            t.ok(connectionProxy.connect.calledOnce, `connection.connect should be called once`);
+            t.end();
+        });
+    });
+
+    t.test(`ECONNRESET`, (t) => {
+        const connection = getConnection({}, {
+            reconnect: false
+        });
+
+        connection.then((conn) => {
+            const err = { code: `ECONNRESET` };
+            const handler = sinon.spy();
+
+            conn.on(`error`, handler);
+            connectionProxy.emit(`error`, err);
+            t.ok(
+              handler.calledWith(err),
+              `error handler was called with error`
+            );
+            t.ok(mysqlProxy.createConnection.calledOnce, `createConnection should be called once`);
+            t.ok(connectionProxy.connect.calledOnce, `connection.connect should be called once`);
+            t.end();
+        });
+    });
+
+    t.test(`PROTOCOL_ENQUEUE_AFTER_FATAL_ERROR`, (t) => {
+        const connection = getConnection({}, {
+            reconnect: false
+        });
+
+        connection.then((conn) => {
+            const err = { code: `PROTOCOL_ENQUEUE_AFTER_FATAL_ERROR` };
+            const handler = sinon.spy();
+
+            conn.on(`error`, handler);
+            connectionProxy.emit(`error`, err);
+            t.ok(
+              handler.calledWith(err),
+              `error handler was called with error`
+            );
+            t.ok(mysqlProxy.createConnection.calledOnce, `createConnection should be called once`);
+            t.ok(connectionProxy.connect.calledOnce, `connection.connect should be called once`);
+            t.end();
+        });
+    });
+
+    t.end();
+});
+
+tap.test(`with a passed connection it should reconnect if specific error events are fired and reconnect is undefined`, (t) => {
+    t.test(`PROTOCOL_CONNECTION_LOST`, (t) => {
+        const connection = getConnection({}, {}, true);
+
+        connection.then((connection) => {
+            connectionProxy.emit(`error`, {code: `PROTOCOL_CONNECTION_LOST`});
+            t.ok(mysqlProxy.createConnection.calledOnce, `createConnection should be called`);
+            t.ok(connectionProxy.connect.calledOnce, `connection.connect should be called`);
+            t.end();
+        });
+    });
+
+    t.test(`ECONNRESET`, (t) => {
+        const connection = getConnection({}, {}, true);
+
+        connection.then((connection) => {
+            connectionProxy.emit(`error`, {code: `ECONNRESET`});
+            t.ok(mysqlProxy.createConnection.calledOnce, `createConnection should be called`);
+            t.ok(connectionProxy.connect.calledOnce, `connection.connect should be called`);
+            t.end();
+        });
+    });
+
+    t.test(`PROTOCOL_ENQUEUE_AFTER_FATAL_ERROR`, (t) => {
+        const connection = getConnection({}, {}, true);
+
+        connection.then((connection) => {
+            connectionProxy.emit(`error`, {code: `PROTOCOL_ENQUEUE_AFTER_FATAL_ERROR`});
+            t.ok(mysqlProxy.createConnection.calledOnce, `createConnection should be called`);
+            t.ok(connectionProxy.connect.calledOnce, `connection.connect should be called`);
+            t.end();
+        });
+    });
+
+    t.end();
+});
+
+tap.test(`with a passed connection it should reconnect if specific error events are fired and reconnect is true`, (t) => {
+    t.test(`PROTOCOL_CONNECTION_LOST`, (t) => {
+        const connection = getConnection({}, {
+            reconnect: true
+        }, true);
+
+        connection.then((connection) => {
+            connectionProxy.emit(`error`, {code: `PROTOCOL_CONNECTION_LOST`});
+            t.ok(mysqlProxy.createConnection.calledOnce, `createConnection should be called`);
+            t.ok(connectionProxy.connect.calledOnce, `connection.connect should be called`);
+            t.end();
+        });
+    });
+
+    t.test(`ECONNRESET`, (t) => {
+        const connection = getConnection({}, {
+            reconnect: true
+        }, true);
+
+        connection.then((connection) => {
+            connectionProxy.emit(`error`, {code: `ECONNRESET`});
+            t.ok(mysqlProxy.createConnection.calledOnce, `createConnection should be called`);
+            t.ok(connectionProxy.connect.calledOnce, `connection.connect should be called`);
+            t.end();
+        });
+    });
+
+    t.test(`PROTOCOL_ENQUEUE_AFTER_FATAL_ERROR`, (t) => {
+        const connection = getConnection({}, {
+            reconnect: true
+        }, true);
+
+        connection.then((connection) => {
+            connectionProxy.emit(`error`, {code: `PROTOCOL_ENQUEUE_AFTER_FATAL_ERROR`});
+            t.ok(mysqlProxy.createConnection.calledOnce, `createConnection should be called`);
+            t.ok(connectionProxy.connect.calledOnce, `connection.connect should be called`);
+            t.end();
+        });
+    });
+
+    t.end();
+});
+
+tap.test(`with a passed connection it should not reconnect if specific error events are fired and reconnect is false`, (t) => {
+    t.test(`PROTOCOL_CONNECTION_LOST`, (t) => {
+        const connection = getConnection({}, {
+            reconnect: false
+        }, true);
+
+        connection.then((conn) => {
+            const err = { code: `PROTOCOL_CONNECTION_LOST` };
+            const handler = sinon.spy();
+
+            conn.on(`error`, handler);
+            connectionProxy.emit(`error`, err);
+            t.ok(
+              handler.calledWith(err),
+              `error handler was called with error`
+            );
+            t.ok(mysqlProxy.createConnection.notCalled, `createConnection should be called once`);
+            t.ok(connectionProxy.connect.notCalled, `connection.connect should be called once`);
+            t.end();
+        });
+    });
+
+    t.test(`ECONNRESET`, (t) => {
+        const connection = getConnection({}, {
+            reconnect: false
+        }, true);
+
+        connection.then((conn) => {
+            const err = { code: `ECONNRESET` };
+            const handler = sinon.spy();
+
+            conn.on(`error`, handler);
+            connectionProxy.emit(`error`, err);
+            t.ok(
+              handler.calledWith(err),
+              `error handler was called with error`
+            );
+            t.ok(mysqlProxy.createConnection.notCalled, `createConnection should be called once`);
+            t.ok(connectionProxy.connect.notCalled, `connection.connect should be called once`);
+            t.end();
+        });
+    });
+
+    t.test(`PROTOCOL_ENQUEUE_AFTER_FATAL_ERROR`, (t) => {
+        const connection = getConnection({}, {
+            reconnect: false
+        }, true);
+
+        connection.then((conn) => {
+            const err = { code: `PROTOCOL_ENQUEUE_AFTER_FATAL_ERROR` };
+            const handler = sinon.spy();
+
+            conn.on(`error`, handler);
+            connectionProxy.emit(`error`, err);
+            t.ok(
+              handler.calledWith(err),
+              `error handler was called with error`
+            );
+            t.ok(mysqlProxy.createConnection.notCalled, `createConnection should be called once`);
+            t.ok(connectionProxy.connect.notCalled, `connection.connect should be called once`);
+            t.end();
+        });
+    });
+
+    t.end();
+});
+
 tap.test(`it should ignore any other errors`, (t) => {
     const connection = getConnection();
 
-    connection.then((connection) => {
-        connectionProxy.emit(`error`, {code: `FAAAAAKE`});
+    connection.then((conn) => {
+        const err = { code: `FAAAAAKE` };
+        const handler = sinon.spy();
+
+        conn.on(`error`, handler);
+        connectionProxy.emit(`error`, err);
+        t.ok(handler.calledWith(err), `error handler was called with error`);
         t.ok(mysqlProxy.createConnection.calledOnce, `createConnection should only be called for the first connection`);
         t.ok(connectionProxy.connect.calledOnce, `connection.connect should only be called for the first connection`);
         t.end();
