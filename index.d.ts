@@ -98,12 +98,7 @@ export interface PoolCluster {
 
     add(id: string, config: PoolConfig): void;
 
-    /**
-     * Close the connection. Any queued data (eg queries) will be sent first. If
-     * there are any fatal errors, the connection will be immediately closed.
-     * @param callback Handler for any fatal error
-     */
-    end(callback?: (err: mysql.MysqlError) => void): void;
+    end(): Blubird<void>;
 
     of(pattern: string, selector?: string): Pool;
     of(pattern: undefined | null | false, selector: string): Pool;
