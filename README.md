@@ -8,22 +8,31 @@ Promise-mysql is a wrapper for [mysqljs/mysql](https://github.com/mysqljs/mysql)
 ## API
 
 ### mysql.createConnection(connectionOptions)
-This will return a the promise of a [connection](#connection) object.
+This will return a the promise of a [connection](#connection-object-methods) object.
 
 #### Parameters
-`connectionOptions` _object_: A [connectionOptions](#connectionOptions) object
+`connectionOptions` _object_: A [connectionOptions](#connectionoptions-object) object
 
 #### Return value
-A Bluebird `Promise` that resolves to a [connection](#connection) object
+A Bluebird `Promise` that resolves to a [connection](#connection-object-methods) object
 
-### mysql.createPool(connectionOptions)
-This will return a the promise of a [pool](#pool) object.
+### mysql.createPool(poolOptions)
+This will return a the promise of a [pool](#pool-object-methods) object.
 
 #### Parameters
-`connectionOptions` _object_: A [connectionOptions](#connectionOptions) object
+`poolOptions` _object_: A [poolOptions](#pooloptions-object) object
 
 #### Return value
-A Bluebird `Promise` that resolves to a [pool](#pool) object
+A Bluebird `Promise` that resolves to a [pool](#pool-object-methods) object
+
+### mysql.createPoolCluster(poolClusterOptions)
+This will return a the promise of a [poolCluster](#poolcluster-object) object.
+
+#### Parameters
+`poolClusterOptions` _object_: A [poolClusterOptions](#poolclusteroptions-object) object
+
+#### Return value
+A Bluebird `Promise` that resolves to a [poolCluster](#poolcluster-object) object
 
 ### connectionOptions object
 
@@ -73,11 +82,23 @@ In addition to the [connection options in mysqljs/mysql](https://github.com/mysq
 
 `connection.on`: Add a listener to the connection object. See [mysqljs/mysql documentation](https://github.com/mysqljs/mysql) for events that may be listened for.
 
+### poolOptions object
+
+In addition to the [pool options in mysqljs/mysql](https://www.npmjs.com/package/mysql#pool-options), promise-mysql accepts the following:
+
+`returnArgumentsArray` _boolean_: If set to true then methods will return an array with the callback arguments from the underlying method (excluding the any errors) and the return value from the call.
+
+`mysqlWrapper` _function_: A function that is passed the `mysql` object so that it can be wrapped with something like the [aws-xray-sdk module](https://www.npmjs.com/package/aws-xray-sdk). This function must either return the wrapped `mysql` object, return a promise of the wrapped `mysql` object or call the callback that is passed into the function.
+
+#### Function arguments
+
+`mysql` _mysql object_: The mysql object
+
+`callback(error, success)` _function_: A node-style callback that can be used to pass the wrapped version of the mysql object out of the wrapper function.
+
 ### Pool object methods
 
-`pool.getConnection`: Get a connection from the pool. See [mysqljs/mysql documentation](https://github.com/mysqljs/mysql#pooling-connections)
-
-`pool.releaseConnection`: Release a connection back into the pool. See [mysqljs/mysql documentation](https://github.com/mysqljs/mysql#pooling-connections)
+`pool.getConnection`: Get a poolConnection from the pool. See [mysqljs/mysql documentation](https://github.com/mysqljs/mysql#pooling-connections)
 
 `pool.query`: Get a connection from the pool, run a query and then release it back into the pool. See [mysqljs/mysql documentation](https://github.com/mysqljs/mysql#pooling-connections)
 
@@ -87,7 +108,25 @@ In addition to the [connection options in mysqljs/mysql](https://github.com/mysq
 
 `pool.escapeId`: Escape query identifiers. See [mysqljs/mysql documentation](https://github.com/mysqljs/mysql#escaping-query-identifiers)
 
-`pool.on`: Add a listener to the connection object. See [mysqljs/mysql documentation](https://github.com/mysqljs/mysql#pool-events) for events that may be listened for.
+`pool.on`: Add a listener to the pool object. See [mysqljs/mysql documentation](https://github.com/mysqljs/mysql#pool-events) for events that may be listened for.
+
+### poolClusterOptions object
+
+The options used to create a pool cluster. See [mysqljs/mysql documentation](https://www.npmjs.com/package/mysql#poolcluster-options)
+
+### poolCluster object methods
+
+`poolCluster.add`: Adds a pool configuration. See [mysqljs/mysql documentation](https://www.npmjs.com/package/mysql#poolcluster)
+
+`poolCluster.remove`: Removes pool configurations. See [mysqljs/mysql documentation](https://www.npmjs.com/package/mysql#poolcluster)
+
+`poolCluster.getConnection`: Get a connection from the pool cluster. See [mysqljs/mysql documentation](https://www.npmjs.com/package/mysql#poolcluster)
+
+`poolCluster.of`: Get a pool from the pool cluster. See [mysqljs/mysql documentation](https://www.npmjs.com/package/mysql#poolcluster)
+
+`poolCluster.end`: End all the connections in a pool cluster. See [mysqljs/mysql documentation](https://github.com/mysqljs/mysql#pooling-connections)
+
+`poolCluster.on`: Add a listener to the pool cluster object. See [mysqljs/mysql documentation](https://github.com/mysqljs/mysql#poolcluster) for events that may be listened for.
 
 ## Upgrading from v3
 The main difference is that `mysql.createPool` now returns a promise. Besides this, the API is the same and you should be able to upgrade straight to v4. The only other difference is the extra options in the [connectionOptions object](#connectionoptions-object).
