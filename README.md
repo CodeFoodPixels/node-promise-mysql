@@ -26,13 +26,13 @@ This will return a the promise of a [pool](#pool-object-methods) object.
 A Bluebird `Promise` that resolves to a [pool](#pool-object-methods) object
 
 ### mysql.createPoolCluster(poolClusterOptions)
-This will return a the promise of a [poolCluster](#poolcluster-object) object.
+This will return a the promise of a [poolCluster](#poolcluster-object-methods) object.
 
 #### Parameters
 `poolClusterOptions` _object_: A [poolClusterOptions](#poolclusteroptions-object) object
 
 #### Return value
-A Bluebird `Promise` that resolves to a [poolCluster](#poolcluster-object) object
+A Bluebird `Promise` that resolves to a [poolCluster](#poolcluster-object-methods) object
 
 ### connectionOptions object
 
