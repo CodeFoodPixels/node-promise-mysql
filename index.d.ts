@@ -5,7 +5,7 @@ export function createConnection(connectionUri: string | mysql.ConnectionConfig)
 
 export function createPool(config: mysql.PoolConfig | string): Bluebird<Pool>;
 
-export { Types, escape, escapeId, format, ConnectionOptions } from 'mysql';
+export { Types, escape, escapeId, format, ConnectionOptions, MysqlError } from 'mysql';
 
 export type mysqlModule = typeof mysql;
 
@@ -53,6 +53,10 @@ export interface Connection {
     escapeId(value: string, forbidQualified?: boolean): string;
 
     format(sql: string, values: any[], stringifyObjects?: boolean, timeZone?: string): string;
+
+    on(ev: 'error', callback: (err: mysql.MysqlError) => void): void;
+
+    on(ev: 'end', callback: () => void): void;
 }
 
 export interface PoolConnection extends Connection {
