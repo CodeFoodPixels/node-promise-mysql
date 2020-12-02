@@ -98,7 +98,7 @@ In addition to the [pool options in mysqljs/mysql](https://www.npmjs.com/package
 
 ### Pool object methods
 
-`pool.getConnection`: Get a poolConnection from the pool. See [mysqljs/mysql documentation](https://github.com/mysqljs/mysql#pooling-connections)
+`pool.getConnection`: Get a [poolConnection](#poolconnection-object-methods) from the pool. See [mysqljs/mysql documentation](https://github.com/mysqljs/mysql#pooling-connections)
 
 `pool.query`: Get a connection from the pool, run a query and then release it back into the pool. See [mysqljs/mysql documentation](https://github.com/mysqljs/mysql#pooling-connections)
 
@@ -110,6 +110,12 @@ In addition to the [pool options in mysqljs/mysql](https://www.npmjs.com/package
 
 `pool.on`: Add a listener to the pool object. See [mysqljs/mysql documentation](https://github.com/mysqljs/mysql#pool-events) for events that may be listened for.
 
+### poolConnection object methods
+
+In addition to the [methods in the connection object](#connection-object-methods), poolConnections also has the following method:
+
+`poolConnection.release`: Release a connection back to the pool. See [mysqljs/mysql documentation](https://www.npmjs.com/package/mysql#pooling-connections)
+
 ### poolClusterOptions object
 
 The options used to create a pool cluster. See [mysqljs/mysql documentation](https://www.npmjs.com/package/mysql#poolcluster-options)
@@ -120,7 +126,7 @@ The options used to create a pool cluster. See [mysqljs/mysql documentation](htt
 
 `poolCluster.remove`: Removes pool configurations. See [mysqljs/mysql documentation](https://www.npmjs.com/package/mysql#poolcluster)
 
-`poolCluster.getConnection`: Get a connection from the pool cluster. See [mysqljs/mysql documentation](https://www.npmjs.com/package/mysql#poolcluster)
+`poolCluster.getConnection`: Get a [poolConnection](#poolconnection-object-methods) from the pool cluster. See [mysqljs/mysql documentation](https://www.npmjs.com/package/mysql#poolcluster)
 
 `poolCluster.of`: Get a pool from the pool cluster. See [mysqljs/mysql documentation](https://www.npmjs.com/package/mysql#poolcluster)
 
