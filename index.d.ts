@@ -63,8 +63,6 @@ export interface Connection {
 
 export interface PoolConnection extends Connection {
     release(): any;
-
-    destroy(): any;
 }
 
 export interface Pool {
