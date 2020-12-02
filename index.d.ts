@@ -68,8 +68,6 @@ export interface PoolConnection extends Connection {
 export interface Pool {
     getConnection(): Bluebird<PoolConnection>;
 
-    releaseConnection(connection: PoolConnection): void;
-
     query: QueryFunction<Bluebird<any>>;
 
     end(options?: mysql.QueryOptions): Bluebird<void>;
