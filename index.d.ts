@@ -5,7 +5,9 @@ export function createConnection(connectionUri: string | mysql.ConnectionConfig)
 
 export function createPool(config: mysql.PoolConfig | string): Bluebird<Pool>;
 
-export { Types, escape, escapeId, format, ConnectionOptions, MysqlError } from 'mysql';
+export function createPoolCluster(config: mysql.PoolClusterConfig): Bluebird<PoolCluster>;
+
+export { Types, escape, escapeId, format, ConnectionOptions, PoolClusterConfig, MysqlError } from 'mysql';
 
 export type mysqlModule = typeof mysql;
 
@@ -87,4 +89,39 @@ export interface Pool {
     on(ev: 'enqueue', callback: (err?: mysql.MysqlError) => void): mysql.Pool;
 
     on(ev: string, callback: (...args: any[]) => void): mysql.Pool;
+}
+
+export interface PoolCluster {
+    config: PoolClusterConfig;
+
+    add(config: PoolConfig): void;
+
+    add(id: string, config: PoolConfig): void;
+
+    /**
+     * Close the connection. Any queued data (eg queries) will be sent first. If
+     * there are any fatal errors, the connection will be immediately closed.
+     * @param callback Handler for any fatal error
+     */
+    end(callback?: (err: mysql.MysqlError) => void): void;
+
+    of(pattern: string, selector?: string): Pool;
+    of(pattern: undefined | null | false, selector: string): Pool;
+
+    /**
+     * remove all pools which match pattern
+     */
+    remove(pattern: string): void;
+
+    getConnection(pattern?: string, selector?: string): Bluebird<PoolConnection>;
+
+    /**
+     * Set handler to be run on a certain event.
+     */
+    on(ev: string, callback: (...args: any[]) => void): PoolCluster;
+
+    /**
+     * Set handler to be run when a node is removed or goes offline.
+     */
+    on(ev: 'remove' | 'offline', callback: (nodeId: string) => void): PoolCluster;
 }
