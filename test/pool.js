@@ -53,7 +53,7 @@ tap.test(`createPool is called`, (t) => {
         });
     });
 
-    t.test(`with arguments`, (t) => {
+    t.test(`with just configuration options`, (t) => {
         const config = {
             test: "test"
         };
@@ -62,6 +62,15 @@ tap.test(`createPool is called`, (t) => {
             t.ok(createPool.calledWith(config), `createPool is called with arguments`);
             t.end();
         });
+    });
+
+    t.test(`with a already instantiated underlying pool`, (t) => {
+        const config = undefined;
+        const underlyingPool = sinon.mock();
+        const p = new pool(config, underlyingPool);
+        t.ok(p.pool === underlyingPool, `uses the underlying pool`);
+        t.ok(createPool.notCalled, `createPool is not called`);
+        t.end();
     });
 
     t.end();
