@@ -96,7 +96,7 @@ export interface PoolCluster {
 
     add(id: string, config: PoolConfig): void;
 
-    end(): Blubird<void>;
+    end(): Bluebird<void>;
 
     of(pattern: string, selector?: string): Pool;
     of(pattern: undefined | null | false, selector: string): Pool;
