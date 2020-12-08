@@ -1,6 +1,6 @@
 {
   "name": "promise-mysql",
-  "version": "4.1.4",
+  "version": "5.0.0",
   "description": "A bluebird wrapper for node-mysql",
   "main": "index.js",
   "scripts": {
