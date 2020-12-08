@@ -134,5 +134,8 @@ The options used to create a pool cluster. See [mysqljs/mysql documentation](htt
 
 `poolCluster.on`: Add a listener to the pool cluster object. See [mysqljs/mysql documentation](https://github.com/mysqljs/mysql#poolcluster) for events that may be listened for.
 
-## Upgrading from v3
+## Upgrading from v3 to v4
 The main difference is that `mysql.createPool` now returns a promise. Besides this, the API is the same and you should be able to upgrade straight to v4. The only other difference is the extra options in the [connectionOptions object](#connectionoptions-object).
+
+## Upgrading from v4 to v5
+The `pool.releaseConnection` has been removed, please use `poolConnection.release` instead.

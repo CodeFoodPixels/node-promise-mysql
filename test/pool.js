@@ -11,7 +11,6 @@ sinon.addBehavior(`callsLastArgWith`, (fake, errVal, retVal) => {
 
 const poolMock = {
     getConnection: sinon.stub().callsLastArgWith(null, `getConnectionPromise`).returns(`getConnectionReturn`),
-    releaseConnection: sinon.stub().returns(`releaseConnectionReturn`),
     query: sinon.stub().callsLastArgWith(null, `queryPromise`).returns(`queryReturn`),
     end: sinon.stub().callsLastArgWith(null, `endPromise`).returns(`endReturn`),
     escape: sinon.stub().returnsArg(0),
@@ -36,7 +35,6 @@ const pool = proxyquire(`../lib/pool.js`, {
 tap.beforeEach((done) => {
     createPool.resetHistory();
     poolMock.getConnection.resetHistory();
-    poolMock.releaseConnection.resetHistory();
     poolMock.query.resetHistory();
     poolMock.end.resetHistory();
     poolMock.escape.resetHistory();
@@ -228,30 +226,6 @@ tap.test(`calls the underlying methods`, (t) => {
                 t.ok(retVal instanceof mockPoolConnection);
                 t.end();
             });
-        });
-
-        t.test(`pool.releaseConnection should call the underlying releaseConnection method with the correct arguments`, (t) => {
-            const connection = {
-                connection: 'test'
-            }
-
-            const retVal = pool.releaseConnection(connection)
-
-            t.ok(poolMock.releaseConnection.calledOnce, `underlying releaseConnection method called`)
-            t.equal(
-                poolMock.releaseConnection.lastCall.args.length,
-                1,
-                `underlying releaseConnection called with correct number of arguments`
-            );
-            t.ok(poolMock.releaseConnection.calledWith(connection.connection));
-
-            t.same(
-                retVal,
-                `releaseConnectionReturn`,
-                `returns arguments`
-            );
-
-            t.end();
         });
 
         t.end();
