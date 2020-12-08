@@ -75,7 +75,7 @@ tap.test(`calls the underlying methods`, (t) => {
         const callSpec = [
             {
                 method: `add`,
-                args: [`test`],
+                args: [`test`, undefined],
             },
             {
                 method: `add`,
