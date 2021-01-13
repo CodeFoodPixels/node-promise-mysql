@@ -90,7 +90,7 @@ export interface Pool {
 }
 
 export interface PoolCluster {
-    config: PoolClusterConfig;
+    config: mysql.PoolClusterConfig;
 
     add(config: PoolConfig): void;
 
