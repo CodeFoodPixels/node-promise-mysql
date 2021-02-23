@@ -20,6 +20,7 @@ export interface ConnectionConfig extends mysql.ConnectionConfig {
 export interface PoolConfig extends mysql.PoolConfig {
     mysqlWrapper?: (mysql: mysqlModule, callback: (err: Error | null, success?: mysqlModule) => void) => mysqlModule | Promise<mysqlModule> | void;
     returnArgumentsArray?: boolean;
+    reconnect?: boolean;
 }
 
 export interface QueryFunction<T> {
