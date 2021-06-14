@@ -30,6 +30,8 @@ export interface QueryFunction<T> {
 }
 
 export class Connection {
+    constructor(config: string | ConnectionConfig, _connection?: Connection);
+
     query: QueryFunction<Bluebird<any>>;
 
     beginTransaction(options?: mysql.QueryOptions): Bluebird<void>;
@@ -66,10 +68,14 @@ export class Connection {
 }
 
 export class PoolConnection extends Connection {
+    constructor(config: ConnectionConfig, _connection?: mysql.Connection);
+
     release(): any;
 }
 
 export class Pool {
+    constructor(config: ConnectionConfig, _pool?: mysql.Pool);
+
     getConnection(): Bluebird<PoolConnection>;
 
     query: QueryFunction<Bluebird<any>>;
@@ -92,6 +98,8 @@ export class Pool {
 }
 
 export class PoolCluster {
+    constructor(config: mysql.PoolClusterConfig);
+
     config: mysql.PoolClusterConfig;
 
     add(config: PoolConfig): void;
