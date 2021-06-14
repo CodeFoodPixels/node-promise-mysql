@@ -29,7 +29,7 @@ export interface QueryFunction<T> {
     (options: string, values: any): T;
 }
 
-export interface Connection {
+export class Connection {
     query: QueryFunction<Bluebird<any>>;
 
     beginTransaction(options?: mysql.QueryOptions): Bluebird<void>;
@@ -65,11 +65,11 @@ export interface Connection {
     on(ev: 'end', callback: () => void): void;
 }
 
-export interface PoolConnection extends Connection {
+export class PoolConnection extends Connection {
     release(): any;
 }
 
-export interface Pool {
+export class Pool {
     getConnection(): Bluebird<PoolConnection>;
 
     query: QueryFunction<Bluebird<any>>;
@@ -91,7 +91,7 @@ export interface Pool {
     on(ev: string, callback: (...args: any[]) => void): mysql.Pool;
 }
 
-export interface PoolCluster {
+export class PoolCluster {
     config: mysql.PoolClusterConfig;
 
     add(config: PoolConfig): void;
