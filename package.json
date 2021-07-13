@@ -1,7 +1,7 @@
 {
   "name": "promise-mysql",
   "version": "5.0.3",
-  "description": "A bluebird wrapper for node-mysql",
+  "description": "A Promise wrapper for node-mysql",
   "main": "index.js",
   "scripts": {
     "tap": "tap",
@@ -30,7 +30,6 @@
     "database",
     "mysql",
     "mysql-promise",
-    "bluebird",
     "q"
   ],
   "author": "Luke Bonaccorsi",
@@ -40,13 +39,11 @@
   },
   "dependencies": {
     "@types/mysql": "^2.15.2",
-    "@types/bluebird": "^3.5.26",
-    "bluebird": "^3.5.1",
     "mysql": "^2.18.1"
   },
   "devDependencies": {
     "proxyquire": "^2.0.1",
     "sinon": "^8.1.0",
-    "tap": "^14.11.0"
+    "tap": "^15.0.9"
   }
 }

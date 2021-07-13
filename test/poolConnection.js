@@ -23,11 +23,10 @@ const poolConnection = proxyquire(`../lib/poolConnection.js`, {
     }
 });
 
-tap.beforeEach((done) => {
+tap.beforeEach(() => {
     constructorSpy.resetHistory();
     connectionMock.release.resetHistory();
     connectionMock.destroy.resetHistory();
-    done();
 });
 
 tap.test(`constructor is called`, (t) => {

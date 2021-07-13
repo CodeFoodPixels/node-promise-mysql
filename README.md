@@ -3,7 +3,7 @@ Promise-mysql
 [![Build Status](https://travis-ci.org/lukeb-uk/node-promise-mysql.svg?style=flat&branch=master)](https://travis-ci.org/lukeb-uk/node-promise-mysql?branch=master)
 [![Greenkeeper badge](https://badges.greenkeeper.io/lukeb-uk/node-promise-mysql.svg)](https://greenkeeper.io/)
 
-Promise-mysql is a wrapper for [mysqljs/mysql](https://github.com/mysqljs/mysql) that wraps function calls with [Bluebird](https://github.com/petkaantonov/bluebird/) promises.
+Promise-mysql is a wrapper for [mysqljs/mysql](https://github.com/mysqljs/mysql) that wraps function calls with native JavaScript promises.
 
 ## API
 
@@ -14,7 +14,7 @@ This will return a the promise of a [connection](#connection-object-methods) obj
 `connectionOptions` _object_: A [connectionOptions](#connectionoptions-object) object
 
 #### Return value
-A Bluebird `Promise` that resolves to a [connection](#connection-object-methods) object
+A native `Promise` that resolves to a [connection](#connection-object-methods) object
 
 ### mysql.createPool(poolOptions)
 This will return a the promise of a [pool](#pool-object-methods) object.
@@ -23,7 +23,7 @@ This will return a the promise of a [pool](#pool-object-methods) object.
 `poolOptions` _object_: A [poolOptions](#pooloptions-object) object
 
 #### Return value
-A Bluebird `Promise` that resolves to a [pool](#pool-object-methods) object
+A native `Promise` that resolves to a [pool](#pool-object-methods) object
 
 ### mysql.createPoolCluster(poolClusterOptions)
 This will return a the promise of a [poolCluster](#poolcluster-object-methods) object.
@@ -32,7 +32,7 @@ This will return a the promise of a [poolCluster](#poolcluster-object-methods) o
 `poolClusterOptions` _object_: A [poolClusterOptions](#poolclusteroptions-object) object
 
 #### Return value
-A Bluebird `Promise` that resolves to a [poolCluster](#poolcluster-object-methods) object
+A native `Promise` that resolves to a [poolCluster](#poolcluster-object-methods) object
 
 ### connectionOptions object
 

@@ -3,7 +3,6 @@
 const tap = require(`tap`);
 const sinon = require(`sinon`);
 const proxyquire = require(`proxyquire`);
-const bluebird = require(`bluebird`);
 
 sinon.addBehavior(`callsLastArgWith`, (fake, errVal, retVal) => {
     fake.callsArgWith(fake.stub.args.length - 1, errVal, retVal);
@@ -36,7 +35,7 @@ const poolCluster = proxyquire(`../lib/poolCluster.js`, {
     './poolConnection.js': mockPoolConnection
 });
 
-tap.beforeEach((done) => {
+tap.beforeEach(() => {
     createPoolCluster.resetHistory();
     poolClusterMock.add.resetHistory();
     poolClusterMock.remove.resetHistory();
@@ -44,7 +43,6 @@ tap.beforeEach((done) => {
     poolClusterMock.of.resetHistory();
     poolClusterMock.end.resetHistory();
     poolClusterMock.on.resetHistory();
-    done();
 });
 
 tap.test(`createPool is called`, (t) => {

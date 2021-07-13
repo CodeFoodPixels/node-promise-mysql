@@ -1,11 +1,10 @@
 import * as mysql from 'mysql';
-import * as Bluebird from 'bluebird';
 
-export function createConnection(connectionUri: string | ConnectionConfig): Bluebird<Connection>;
+export function createConnection(connectionUri: string | ConnectionConfig): Promise<Connection>;
 
-export function createPool(config: PoolConfig | string): Bluebird<Pool>;
+export function createPool(config: PoolConfig | string): Promise<Pool>;
 
-export function createPoolCluster(config: mysql.PoolClusterConfig): Bluebird<PoolCluster>;
+export function createPoolCluster(config: mysql.PoolClusterConfig): Promise<PoolCluster>;
 
 export { Types, escape, escapeId, format, ConnectionOptions, PoolClusterConfig, MysqlError } from 'mysql';
 
@@ -30,23 +29,23 @@ export interface QueryFunction<T> {
 }
 
 export interface Connection {
-    query: QueryFunction<Bluebird<any>>;
+    query: QueryFunction<Promise<any>>;
 
-    beginTransaction(options?: mysql.QueryOptions): Bluebird<void>;
+    beginTransaction(options?: mysql.QueryOptions): Promise<void>;
 
-    commit(options?: mysql.QueryOptions): Bluebird<void>;
+    commit(options?: mysql.QueryOptions): Promise<void>;
 
-    rollback(options?: mysql.QueryOptions): Bluebird<void>;
+    rollback(options?: mysql.QueryOptions): Promise<void>;
 
-    changeUser(options?: mysql.ConnectionOptions): Bluebird<void>;
+    changeUser(options?: mysql.ConnectionOptions): Promise<void>;
 
-    ping(options?: mysql.QueryOptions): Bluebird<void>;
+    ping(options?: mysql.QueryOptions): Promise<void>;
 
     queryStream: QueryFunction<mysql.Query>
 
-    statistics(options?: mysql.QueryOptions): Bluebird<void>;
+    statistics(options?: mysql.QueryOptions): Promise<void>;
 
-    end(options?: mysql.QueryOptions): Bluebird<void>;
+    end(options?: mysql.QueryOptions): Promise<void>;
 
     destroy(): void;
 
@@ -70,13 +69,13 @@ export interface PoolConnection extends Connection {
 }
 
 export interface Pool {
-    getConnection(): Bluebird<PoolConnection>;
+    getConnection(): Promise<PoolConnection>;
 
-    query: QueryFunction<Bluebird<any>>;
+    query: QueryFunction<Promise<any>>;
 
-    end(options?: mysql.QueryOptions): Bluebird<void>;
+    end(options?: mysql.QueryOptions): Promise<void>;
 
-    release(options?: mysql.QueryOptions): Bluebird<void>;
+    release(options?: mysql.QueryOptions): Promise<void>;
 
     escape(value: any, stringifyObjects?: boolean, timeZone?: string): string;
 
@@ -98,7 +97,7 @@ export interface PoolCluster {
 
     add(id: string, config: PoolConfig): void;
 
-    end(): Bluebird<void>;
+    end(): Promise<void>;
 
     of(pattern: string, selector?: string): Pool;
     of(pattern: undefined | null | false, selector: string): Pool;
@@ -108,7 +107,7 @@ export interface PoolCluster {
      */
     remove(pattern: string): void;
 
-    getConnection(pattern?: string, selector?: string): Bluebird<PoolConnection>;
+    getConnection(pattern?: string, selector?: string): Promise<PoolConnection>;
 
     /**
      * Set handler to be run on a certain event.
