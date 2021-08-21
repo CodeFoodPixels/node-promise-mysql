@@ -19,3 +19,7 @@ exports.Types = mysql.Types;
 exports.escape = mysql.escape;
 exports.escapeId = mysql.escapeId;
 exports.format = mysql.format;
+
+exports.PoolCluster = PoolCluster;
+exports.Pool = Pool;
+exports.Connection = Connection;
