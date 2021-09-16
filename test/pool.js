@@ -32,14 +32,13 @@ const pool = proxyquire(`../lib/pool.js`, {
     './poolConnection.js': mockPoolConnection
 });
 
-tap.beforeEach((done) => {
+tap.beforeEach(() => {
     createPool.resetHistory();
     poolMock.getConnection.resetHistory();
     poolMock.query.resetHistory();
     poolMock.end.resetHistory();
     poolMock.escape.resetHistory();
     poolMock.escapeId.resetHistory();
-    done();
 });
 
 tap.test(`createPool is called`, (t) => {

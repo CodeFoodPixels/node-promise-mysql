@@ -36,7 +36,7 @@ const poolCluster = proxyquire(`../lib/poolCluster.js`, {
     './poolConnection.js': mockPoolConnection
 });
 
-tap.beforeEach((done) => {
+tap.beforeEach(() => {
     createPoolCluster.resetHistory();
     poolClusterMock.add.resetHistory();
     poolClusterMock.remove.resetHistory();
@@ -44,7 +44,6 @@ tap.beforeEach((done) => {
     poolClusterMock.of.resetHistory();
     poolClusterMock.end.resetHistory();
     poolClusterMock.on.resetHistory();
-    done();
 });
 
 tap.test(`createPool is called`, (t) => {
