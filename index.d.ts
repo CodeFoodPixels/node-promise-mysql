@@ -7,7 +7,7 @@ export function createPool(config: PoolConfig | string): Bluebird<Pool>;
 
 export function createPoolCluster(config: mysql.PoolClusterConfig): Bluebird<PoolCluster>;
 
-export { Types, escape, escapeId, format, ConnectionOptions, PoolClusterConfig, MysqlError } from 'mysql';
+export { Types, escape, escapeId, format, raw, ConnectionOptions, PoolClusterConfig, MysqlError } from 'mysql';
 
 export type mysqlModule = typeof mysql;
 
