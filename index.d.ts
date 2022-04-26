@@ -12,7 +12,7 @@ export { Types, escape, escapeId, format, raw, ConnectionOptions, PoolClusterCon
 export type mysqlModule = typeof mysql;
 
 export interface ConnectionConfig extends mysql.ConnectionConfig {
-    mysqlWrapper?: (mysql: mysqlModule, callback: (err: Error | null, success?: mysqlModule) => void) => mysqlModule | Promise<mysqlModule> | void;
+    mysqlWrapper?: (mysql: mysqlModule, callback?: (err: Error | null, success?: mysqlModule) => void) => mysqlModule | Promise<mysqlModule> | void;
     returnArgumentsArray?: boolean;
     reconnect?: boolean;
 }
@@ -23,16 +23,29 @@ export interface PoolConfig extends mysql.PoolConfig {
     reconnect?: boolean;
 }
 
-export interface QueryFunction<T> {
-    (query: mysql.Query | string | mysql.QueryOptions): T;
+export interface QueryFunction {
+    <T extends unknown>(query: mysql.Query | string | mysql.QueryOptions): T;
 
-    (options: string, values: any): T;
+    <T extends unknown>(options: string, values?: any): T;
+}
+
+export interface Query<T> extends mysql.Query {
+
+    on(ev: 'result', callback: (row: T, index: number) => void): mysql.Query;
+
+    on(ev: 'error', callback: (err: mysql.MysqlError) => void): mysql.Query;
+
+    on(ev: 'fields', callback: (fields: mysql.FieldInfo[], index: number) => void): mysql.Query;
+
+    on<T extends unknown>(ev: 'packet', callback: (packet: T) => void): mysql.Query;
+
+    on(ev: 'end', callback: () => void): mysql.Query;
 }
 
 export class Connection {
     constructor(config: string | ConnectionConfig, _connection?: Connection);
 
-    query: QueryFunction<Bluebird<any>>;
+    query: QueryFunction;
 
     beginTransaction(options?: mysql.QueryOptions): Bluebird<void>;
 
@@ -44,7 +57,7 @@ export class Connection {
 
     ping(options?: mysql.QueryOptions): Bluebird<void>;
 
-    queryStream: QueryFunction<mysql.Query>
+    queryStream<T extends unknown>(options: string, values?: any): Query<T>;
 
     statistics(options?: mysql.QueryOptions): Bluebird<void>;
 
@@ -78,7 +91,7 @@ export class Pool {
 
     getConnection(): Bluebird<PoolConnection>;
 
-    query: QueryFunction<Bluebird<any>>;
+    query: QueryFunction;
 
     end(options?: mysql.QueryOptions): Bluebird<void>;
 
@@ -94,7 +107,7 @@ export class Pool {
 
     on(ev: 'enqueue', callback: (err?: mysql.MysqlError) => void): mysql.Pool;
 
-    on(ev: string, callback: (...args: any[]) => void): mysql.Pool;
+    on<T extends unknown>(ev: string, callback: (...args: T[]) => void): mysql.Pool;
 }
 
 export class PoolCluster {
@@ -121,7 +134,7 @@ export class PoolCluster {
     /**
      * Set handler to be run on a certain event.
      */
-    on(ev: string, callback: (...args: any[]) => void): PoolCluster;
+    on<T extends unknown>(ev: string, callback: (...args: T[]) => void): PoolCluster;
 
     /**
      * Set handler to be run when a node is removed or goes offline.
