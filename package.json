@@ -7,7 +7,8 @@
     "tap": "tap",
     "test": "tap test/*.js --100",
     "coverage": "tap test/*.js --coverage-report=html",
-    "updatesnapshots": "TAP_SNAPSHOT=1 npm run test"
+    "updatesnapshots": "TAP_SNAPSHOT=1 npm run test",
+    "ts-node": "ts-node"
   },
   "repository": {
     "type": "git",
@@ -47,6 +48,8 @@
   "devDependencies": {
     "proxyquire": "^2.0.1",
     "sinon": "^8.1.0",
-    "tap": "^15.0.9"
+    "tap": "^15.0.9",
+    "ts-node": "^10.7.0",
+    "typescript": "^4.6.3"
   }
 }
