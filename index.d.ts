@@ -10,6 +10,8 @@ export function createPoolCluster(config: mysql.PoolClusterConfig): Bluebird<Poo
 export { Types, escape, escapeId, format, raw, ConnectionOptions, PoolClusterConfig, MysqlError } from 'mysql';
 
 export type mysqlModule = typeof mysql;
+export type FieldInfo = typeof mysql.FieldInfo;
+export type Query = typeof mysql.Query;
 
 export interface ConnectionConfig extends mysql.ConnectionConfig {
     mysqlWrapper?: (mysql: mysqlModule, callback?: (err: Error | null, success?: mysqlModule) => void) => mysqlModule | Promise<mysqlModule> | void;
