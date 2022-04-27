@@ -14,4 +14,4 @@ In the `typescript` folder there are the equivalent examples. In order to run th
 
 ### Note
 
-I am using `ts-node` in order to avoid including a bundler. If you try to compile the typescript files to javascript using ithe `outDir` option in `tsconfig` then you will get import errors beacuse we are pulling the `index` file form the root of the project.
+These examples are using `ts-node` in order to avoid including a bundler. If you try to compile the typescript files to javascript using ithe `outDir` option in `tsconfig` then you will get import errors beacuse we are pulling the `index` file form the root of the project.
