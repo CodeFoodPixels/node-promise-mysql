@@ -1,5 +1,5 @@
 import Bluebird from 'bluebird';
-import * as mysql from '../../../index';
+import * as mysql from '../../../../index';
 
 async function runReturn() {
     const connection = await mysql.createConnection({

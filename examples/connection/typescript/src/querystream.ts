@@ -1,4 +1,4 @@
-import * as mysql from '../../../index';
+import * as mysql from '../../../../index';
 import { Employee } from './employee';
 
 function run() {

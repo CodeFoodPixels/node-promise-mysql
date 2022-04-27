@@ -1,6 +1,8 @@
 import * as mysql from 'mysql';
 import * as Bluebird from 'bluebird';
 
+export type { FieldInfo } from 'mysql';
+
 export function createConnection(connectionUri: string | ConnectionConfig): Bluebird<Connection>;
 
 export function createPool(config: PoolConfig | string): Bluebird<Pool>;
@@ -10,9 +12,6 @@ export function createPoolCluster(config: mysql.PoolClusterConfig): Bluebird<Poo
 export { Types, escape, escapeId, format, raw, ConnectionOptions, PoolClusterConfig, MysqlError } from 'mysql';
 
 export type mysqlModule = typeof mysql;
-export type FieldInfo = typeof mysql.FieldInfo;
-export type Query = typeof mysql.Query;
-
 export interface ConnectionConfig extends mysql.ConnectionConfig {
     mysqlWrapper?: (mysql: mysqlModule, callback?: (err: Error | null, success?: mysqlModule) => void) => mysqlModule | Promise<mysqlModule> | void;
     returnArgumentsArray?: boolean;
@@ -26,9 +25,9 @@ export interface PoolConfig extends mysql.PoolConfig {
 }
 
 export interface QueryFunction {
-    <T extends unknown>(query: mysql.Query | string | mysql.QueryOptions): T;
+    <T extends unknown>(query: mysql.Query | string | mysql.QueryOptions): Bluebird<T>;
 
-    <T extends unknown>(options: string, values?: any): T;
+    <T extends unknown>(options: string, values?: any): Bluebird<T>;
 }
 
 export interface Query<T> extends mysql.Query {

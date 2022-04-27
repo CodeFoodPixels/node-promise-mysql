@@ -1,4 +1,4 @@
-import * as mysql from '../../../index';
+import * as mysql from '../../../../index';
 import { Employee } from './employee';
 
 async function run() {
@@ -16,7 +16,7 @@ async function run() {
         employees.forEach(employee => {
             console.log(`The employee with the employee number ${employee.emp_no} is ${employee.first_name} ${employee.last_name}`);
         });
-    
+
         connection.end();
     })
 }

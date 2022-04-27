@@ -1,0 +1,18 @@
+{
+  "name": "typescript-promisify-mysql",
+  "version": "1.0.0",
+  "description": "A demo to show how one would use promisify-mysql withing a typescript project",
+  "scripts": {
+    "ts-node": "ts-node"
+  },
+  "author": "Michael Kornelakis",
+  "license": "MIT",
+  "devDependencies": {
+    "mysql": "^2.18.1",
+    "@types/mysql": "^2.15.2",
+    "@types/bluebird": "^3.5.26",
+    "bluebird": "^3.5.1",
+    "ts-node": "^10.7.0",
+    "typescript": "^4.6.3"
+  }
+}
