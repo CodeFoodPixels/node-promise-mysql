@@ -1,5 +1,4 @@
-import mysql from '../../../../index';
-import type { FieldInfo, Query } from '../../../../index';
+import mysql, { ArgumentsArray } from '../../../../index';
 import { Employee } from './employee';
 
 function run() {
@@ -13,7 +12,7 @@ function run() {
     }).then((conn) => {
         connection = conn;
 
-        return connection.query<[data: Employee[], fields: FieldInfo[], query: Query<Employee>]>('select * from employees limit 0, 10');
+        return connection.query<ArgumentsArray<Employee>>('select * from employees limit 0, 10');
     }).then(([data, fields, query]) => {
         console.log(`The SQL for the query was: ${query.sql}\n`);
 
@@ -40,7 +39,7 @@ async function runAwait() {
         returnArgumentsArray: true
     });
 
-    const [data, fields, query] = await connection.query<[data: Employee[], fields: mysql.FieldInfo[], query: Query<Employee>]>('select * from employees limit 0, 10');
+    const [data, fields, query] = await connection.query<ArgumentsArray<Employee>>('select * from employees limit 0, 10');
 
     console.log(`The SQL for the query was: ${query.sql}\n`);
 
