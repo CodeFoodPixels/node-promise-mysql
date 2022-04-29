@@ -25,9 +25,9 @@ export interface PoolConfig extends mysql.PoolConfig {
 }
 
 export interface QueryFunction {
-    <T extends unknown>(query: mysql.Query | string | mysql.QueryOptions): Bluebird<T>;
+    <T extends any>(query: mysql.Query | string | mysql.QueryOptions): Bluebird<T>;
 
-    <T extends unknown>(options: string, values?: any): Bluebird<T>;
+    <T extends any>(options: string, values?: any): Bluebird<T>;
 }
 
 export interface Query<T> extends mysql.Query {
@@ -38,7 +38,7 @@ export interface Query<T> extends mysql.Query {
 
     on(ev: 'fields', callback: (fields: mysql.FieldInfo[], index: number) => void): mysql.Query;
 
-    on<T extends unknown>(ev: 'packet', callback: (packet: T) => void): mysql.Query;
+    on<T extends any>(ev: 'packet', callback: (packet: T) => void): mysql.Query;
 
     on(ev: 'end', callback: () => void): mysql.Query;
 }
@@ -58,7 +58,7 @@ export class Connection {
 
     ping(options?: mysql.QueryOptions): Bluebird<void>;
 
-    queryStream<T extends unknown>(options: string, values?: any): Query<T>;
+    queryStream<T extends any>(options: string, values?: any): Query<T>;
 
     statistics(options?: mysql.QueryOptions): Bluebird<void>;
 
@@ -108,7 +108,7 @@ export class Pool {
 
     on(ev: 'enqueue', callback: (err?: mysql.MysqlError) => void): mysql.Pool;
 
-    on<T extends unknown>(ev: string, callback: (...args: T[]) => void): mysql.Pool;
+    on<T extends any>(ev: string, callback: (...args: T[]) => void): mysql.Pool;
 }
 
 export class PoolCluster {
@@ -135,7 +135,7 @@ export class PoolCluster {
     /**
      * Set handler to be run on a certain event.
      */
-    on<T extends unknown>(ev: string, callback: (...args: T[]) => void): PoolCluster;
+    on<T extends any>(ev: string, callback: (...args: T[]) => void): PoolCluster;
 
     /**
      * Set handler to be run when a node is removed or goes offline.
