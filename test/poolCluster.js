@@ -3,7 +3,6 @@
 const tap = require(`tap`);
 const sinon = require(`sinon`);
 const proxyquire = require(`proxyquire`);
-const bluebird = require(`bluebird`);
 
 sinon.addBehavior(`callsLastArgWith`, (fake, errVal, retVal) => {
     fake.callsArgWith(fake.stub.args.length - 1, errVal, retVal);

@@ -1,4 +1,3 @@
-import Bluebird from 'bluebird';
 import * as mysql from '../../../../index';
 
 async function runReturn() {
@@ -17,7 +16,7 @@ async function runPromise() {
         user: 'root',
         password: 'password',
         database: 'employees',
-        mysqlWrapper: (mysqlInstance: mysql.mysqlModule) => Bluebird.resolve(wrapMysql(mysqlInstance, 'runPromise')) as unknown as Promise<mysql.mysqlModule>
+        mysqlWrapper: (mysqlInstance: mysql.mysqlModule) => Promise.resolve(wrapMysql(mysqlInstance, 'runPromise')) as unknown as Promise<mysql.mysqlModule>
     });
 
     connection.end();

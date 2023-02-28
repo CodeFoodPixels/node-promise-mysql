@@ -1,11 +1,10 @@
 import * as mysql from 'mysql';
-import Bluebird from 'bluebird';
 
-export function createConnection(connectionUri: string | ConnectionConfig): Bluebird<Connection>;
+export function createConnection(connectionUri: string | ConnectionConfig): Promise<Connection>;
 
-export function createPool(config: PoolConfig | string): Bluebird<Pool>;
+export function createPool(config: PoolConfig | string): Promise<Pool>;
 
-export function createPoolCluster(config: mysql.PoolClusterConfig): Bluebird<PoolCluster>;
+export function createPoolCluster(config: mysql.PoolClusterConfig): Promise<PoolCluster>;
 
 export { Types, escape, escapeId, format, raw, ConnectionOptions, PoolClusterConfig, MysqlError } from 'mysql';
 
@@ -25,9 +24,9 @@ export interface PoolConfig extends mysql.PoolConfig {
 }
 
 export interface QueryFunction {
-    <T = any>(query: mysql.Query | string | mysql.QueryOptions): Bluebird<T>;
+    <T = any>(query: mysql.Query | string | mysql.QueryOptions): Promise<T>;
 
-    <T = any>(options: string, values?: any): Bluebird<T>;
+    <T = any>(options: string, values?: any): Promise<T>;
 }
 
 export interface Query<T> extends mysql.Query {
@@ -48,21 +47,21 @@ export class Connection {
 
     query: QueryFunction;
 
-    beginTransaction(options?: mysql.QueryOptions): Bluebird<void>;
+    beginTransaction(options?: mysql.QueryOptions): Promise<void>;
 
-    commit(options?: mysql.QueryOptions): Bluebird<void>;
+    commit(options?: mysql.QueryOptions): Promise<void>;
 
-    rollback(options?: mysql.QueryOptions): Bluebird<void>;
+    rollback(options?: mysql.QueryOptions): Promise<void>;
 
-    changeUser(options?: mysql.ConnectionOptions): Bluebird<void>;
+    changeUser(options?: mysql.ConnectionOptions): Promise<void>;
 
-    ping(options?: mysql.QueryOptions): Bluebird<void>;
+    ping(options?: mysql.QueryOptions): Promise<void>;
 
     queryStream<T = any>(options: string, values?: any): Query<T>;
 
-    statistics(options?: mysql.QueryOptions): Bluebird<void>;
+    statistics(options?: mysql.QueryOptions): Promise<void>;
 
-    end(options?: mysql.QueryOptions): Bluebird<void>;
+    end(options?: mysql.QueryOptions): Promise<void>;
 
     destroy(): void;
 
@@ -90,13 +89,13 @@ export class PoolConnection extends Connection {
 export class Pool {
     constructor(config: ConnectionConfig, _pool?: mysql.Pool);
 
-    getConnection(): Bluebird<PoolConnection>;
+    getConnection(): Promise<PoolConnection>;
 
     query: QueryFunction;
 
-    end(options?: mysql.QueryOptions): Bluebird<void>;
+    end(options?: mysql.QueryOptions): Promise<void>;
 
-    release(options?: mysql.QueryOptions): Bluebird<void>;
+    release(options?: mysql.QueryOptions): Promise<void>;
 
     escape(value: any, stringifyObjects?: boolean, timeZone?: string): string;
 
@@ -120,7 +119,7 @@ export class PoolCluster {
 
     add(id: string, config: PoolConfig): void;
 
-    end(): Bluebird<void>;
+    end(): Promise<void>;
 
     of(pattern: string, selector?: string): Pool;
     of(pattern: undefined | null | false, selector: string): Pool;
@@ -130,7 +129,7 @@ export class PoolCluster {
      */
     remove(pattern: string): void;
 
-    getConnection(pattern?: string, selector?: string): Bluebird<PoolConnection>;
+    getConnection(pattern?: string, selector?: string): Promise<PoolConnection>;
 
     /**
      * Set handler to be run on a certain event.

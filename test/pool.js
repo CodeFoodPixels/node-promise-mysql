@@ -3,7 +3,6 @@
 const tap = require(`tap`);
 const sinon = require(`sinon`);
 const proxyquire = require(`proxyquire`);
-const bluebird = require(`bluebird`);
 
 sinon.addBehavior(`callsLastArgWith`, (fake, errVal, retVal) => {
     fake.callsArgWith(fake.stub.args.length - 1, errVal, retVal);
@@ -98,7 +97,7 @@ tap.test(`it should allow you to wrap mysql`, (t) => {
         return new pool({
             mysqlWrapper: (mysql) => {
                 t.equal(mysql, mysqlMock, `proxy should be passed to the wrapper`);
-                return bluebird.resolve(wrappedMysqlProxy);
+                return Promise.resolve(wrappedMysqlProxy);
             }
         }).then(() => {
             t.ok(wrappedMysqlProxy.createPool.calledOnce, `wrapped createPool should get called`);
@@ -110,7 +109,7 @@ tap.test(`it should allow you to wrap mysql`, (t) => {
         return new pool({
             mysqlWrapper: (mysql) => {
                 t.equal(mysql, mysqlMock, `proxy should be passed to the wrapper`);
-                return bluebird.reject(`faaaaaaail`);
+                return Promise.reject(`faaaaaaail`);
             }
         }).catch((err) => {
             t.ok(err, `faaaaaaail`, `The connection should be rejected with the error`);

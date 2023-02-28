@@ -1,5 +1,4 @@
 const mysql = require('../../index.js');
-const bluebird = require('bluebird');
 
 async function runReturn() {
     const connection = await mysql.createConnection({
@@ -20,7 +19,7 @@ async function runPromise() {
         password: 'password',
         database: 'employees',
         mysqlWrapper: (mysqlInstance) => {
-            return bluebird.resolve(wrapMysql(mysqlInstance, 'runPromise'));
+            return Promise.resolve(wrapMysql(mysqlInstance, 'runPromise'));
         }
     });
 

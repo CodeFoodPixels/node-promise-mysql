@@ -4,7 +4,6 @@ const tap = require(`tap`);
 const sinon = require(`sinon`);
 const proxyquire = require(`proxyquire`);
 const eventEmitter = require(`events`);
-const bluebird = require(`bluebird`);
 
 sinon.addBehavior(`callsLastArgWith`, (fake, errVal, retVal) => {
     fake.callsArgWith(fake.stub.args.length - 1, errVal, retVal);
@@ -690,7 +689,7 @@ tap.test(`it should allow you to wrap mysql`, (t) => {
         const connection = getConnection({}, {
             mysqlWrapper: (mysql) => {
                 t.equal(mysql, mysqlProxy, `proxy should be passed to the wrapper`);
-                return bluebird.resolve(wrappedMysqlProxy);
+                return Promise.resolve(wrappedMysqlProxy);
             }
         });
 
@@ -711,7 +710,7 @@ tap.test(`it should allow you to wrap mysql`, (t) => {
         const connection = getConnection({}, {
             mysqlWrapper: (mysql) => {
                 t.equal(mysql, mysqlProxy, `proxy should be passed to the wrapper`);
-                return bluebird.reject(`faaaaaaail`);
+                return Promise.reject(`faaaaaaail`);
             }
         });
 
